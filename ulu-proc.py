@@ -40,11 +40,20 @@ class Processor(object):
                 elements.append(d)
         return elements
 
-
+    @staticmethod
+    def parse_entry(entry):
+        """
+        Given an entry bs4 tag, will parse entry and return sub-elements
+        :param entry: bs4 tag found in original source
+        :return: dictionary of entry
+        """
+        if '.' in entry['id']:
+            print(entry.text)
 
 
 if __name__ == '__main__':
     ulu_proc = Processor()
     page = ulu_proc.get_src()
     refs = ulu_proc.get_dict_entries(page)
-    print(refs)
+    for r in refs:
+        ulu_proc.parse_entry(r)
