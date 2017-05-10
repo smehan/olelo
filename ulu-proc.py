@@ -7,6 +7,7 @@
 
 # standard libs
 import os
+import string
 
 # 3rd-party libs
 from bs4 import BeautifulSoup
@@ -41,14 +42,33 @@ class Processor(object):
         return elements
 
     @staticmethod
-    def parse_entry(entry):
+    def parse_content(entry):
         """
-        Given an entry bs4 tag, will parse entry and return sub-elements
+        method to parse and extract the head word and 
+        definitions from the entry.
+        :param entry: string from original page source entry
+        :return: string of head word, string of content
+        """
+        if entry is None or entry == '':
+            return None
+        entry = entry.strip()
+        hw = entry.split('\n')[0].replace('.', '')
+        rest = entry.split('\n')[1:]
+        return hw, rest
+
+    @staticmethod
+    def build_entry(entry):
+        """
+        Given an entry bs4 tag, will parse entry and return a dict of the 
+        target word and content, including ref id from src.
         :param entry: bs4 tag found in original source
-        :return: dictionary of entry
+        :return: dict of entry
         """
+        # Firstly, we check to see if this is a word definition. Other cases are
+        # letter definition or general text
         if '.' in entry['id']:
-            out = {entry['id']: entry.text}
+            head_word, content = ulu_proc.parse_content(entry.text)
+            out = {head_word: {'content': content, 'id': entry['id'] }}
             return out
 
 
@@ -57,4 +77,4 @@ if __name__ == '__main__':
     page = ulu_proc.get_src()
     refs = ulu_proc.get_dict_entries(page)
     for r in refs:
-        print(ulu_proc.parse_entry(r))
+        print(ulu_proc.build_entry(r))
