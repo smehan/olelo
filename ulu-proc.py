@@ -9,7 +9,7 @@
 import os
 
 # 3rd-party libs
-import bs4
+from bs4 import BeautifulSoup
 
 # application libs
 
@@ -25,9 +25,21 @@ class Processor(object):
 
     def get_src(self):
         with open(os.path.join(self.ULUDICTSRCPATH, 'ulukau-1.html'), 'r') as f:
-            print(f.readlines())
+            return BeautifulSoup(f.read(), 'html.parser')
+
+    @staticmethod
+    def get_dict_entries(p):
+        """
+        given a bs4 object with the dictionary html, will return all of the dictionary elements in the page
+        :param p: bs4 object of page
+        :return: all dictionary elements in page
+        """
+        for d in page.find_all("div"):
+            if 'id' in d.attrs:
+                print(d)
 
 
 if __name__ == '__main__':
     ulu_proc = Processor()
-    ulu_proc.get_src()
+    page = ulu_proc.get_src()
+    ulu_proc.get_dict_entries(page)
