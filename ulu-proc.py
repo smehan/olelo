@@ -32,14 +32,19 @@ class Processor(object):
         """
         given a bs4 object with the dictionary html, will return all of the dictionary elements in the page
         :param p: bs4 object of page
-        :return: all dictionary elements in page
+        :return: list of references to dictionary elements in page as bs4 tags
         """
+        elements = []
         for d in page.find_all("div"):
             if 'id' in d.attrs:
-                print(d)
+                elements.append(d)
+        return elements
+
+
 
 
 if __name__ == '__main__':
     ulu_proc = Processor()
     page = ulu_proc.get_src()
-    ulu_proc.get_dict_entries(page)
+    refs = ulu_proc.get_dict_entries(page)
+    print(refs)
