@@ -50,7 +50,7 @@ class Processor(object):
         :return: string of head word, string of content
         """
         if entry is None or entry == '':
-            return None
+            return None, None
         entry = entry.strip()
         # TODO there are language tags in the original html, including HAW and LAT, that prolly should be leveraged
         hw = entry.split('\n')[0].replace('.', '').rstrip(' ')
@@ -69,7 +69,8 @@ class Processor(object):
         # letter definition or general text
         if '.' in entry['id']:
             head_word, content = ulu_proc.parse_content(entry.text)
-            return {head_word: {'content': content, 'id': entry['id'] }}
+            if head_word and content is not None:
+                return {head_word: {'content': content, 'id': entry['id'] }}
 
 
 if __name__ == '__main__':
