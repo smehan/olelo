@@ -48,7 +48,8 @@ class Processor(object):
         :return: dictionary of entry
         """
         if '.' in entry['id']:
-            print(entry.text)
+            out = {entry['id']: entry.text}
+            return out
 
 
 if __name__ == '__main__':
@@ -56,4 +57,4 @@ if __name__ == '__main__':
     page = ulu_proc.get_src()
     refs = ulu_proc.get_dict_entries(page)
     for r in refs:
-        ulu_proc.parse_entry(r)
+        print(ulu_proc.parse_entry(r))
