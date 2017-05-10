@@ -24,7 +24,7 @@ class Processor(object):
         """Constructor for Processor"""
 
     def get_src(self):
-        with open(os.path.join(self.ULUDICTSRCPATH, 'ulukau-1.html'), 'r') as f:
+        with open(os.path.join(self.ULUDICTSRCPATH, 'puk-1.html'), 'r') as f:
             return BeautifulSoup(f.read(), 'html.parser')
 
     @staticmethod
