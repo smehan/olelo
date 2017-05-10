@@ -31,7 +31,7 @@ class Processor(object):
     def get_dict_entries(p):
         """
         given a bs4 object with the dictionary html, will return all of the dictionary elements in the page
-        :param p: bs4 object of page
+        :param p: bs4 object formed from page
         :return: list of references to dictionary elements in page as bs4 tags
         """
         elements = []
