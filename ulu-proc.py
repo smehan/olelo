@@ -52,7 +52,7 @@ class Processor(object):
         if entry is None or entry == '':
             return None
         entry = entry.strip()
-        hw = entry.split('\n')[0].replace('.', '')
+        hw = entry.split('\n')[0].replace('.', '').rstrip(' ')
         rest = entry.split('\n')[1:]
         return hw, rest
 
