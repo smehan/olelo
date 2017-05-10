@@ -31,9 +31,9 @@ class Processor(object):
     @staticmethod
     def get_dict_entries(p):
         """
-        given a bs4 object with the dictionary html, will return all of the dictionary elements in the page
+        given a bs4 object with the dictionary html, will return all of the headword elements in the page
         :param p: bs4 object formed from page
-        :return: list of references to dictionary elements in page as bs4 tags
+        :return: list of references to headword elements in page as bs4 tags
         """
         elements = []
         for d in page.find_all("div"):
@@ -60,7 +60,7 @@ class Processor(object):
     def build_entry(entry):
         """
         Given an entry bs4 tag, will parse entry and return a dict of the 
-        target word and content, including ref id from src.
+        head word and content, including ref id from src.
         :param entry: bs4 tag found in original source
         :return: dict of entry
         """
@@ -68,8 +68,7 @@ class Processor(object):
         # letter definition or general text
         if '.' in entry['id']:
             head_word, content = ulu_proc.parse_content(entry.text)
-            out = {head_word: {'content': content, 'id': entry['id'] }}
-            return out
+            return {head_word: {'content': content, 'id': entry['id'] }}
 
 
 if __name__ == '__main__':
