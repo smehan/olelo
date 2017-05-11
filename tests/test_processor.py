@@ -18,16 +18,20 @@ from processor.ulu_processor import Processor
 #     assert p.get_src()
 
 
+@pytest.fixture(scope='module')
+def p():
+    return Processor()
+
+
 class TestProcessor(object):
 
     def setup_class(self):
-        pass
+        p = Processor()
 
     def teardown_class(self):
         pass
 
-    def test_get_dict_entries(self):
-        p = Processor()
+    def test_get_dict_entries(self, p):
         with pytest.raises(TypeError):
             p.get_dict_entries(1)
             p.get_dict_entries('some text')
