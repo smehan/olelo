@@ -65,7 +65,7 @@ class Processor(object):
         :param entry: bs4 tag found in original source
         :return: dict of entry
         """
-        # Firstly, we check to see if this is a word definition. Other cases are
+        # Firstly, we check to see if this is a word definition. Other cases not handled are
         # letter definition or general text
         if '.' in entry['id']:
             head_word, content = ulu_proc.parse_content(entry.text)
