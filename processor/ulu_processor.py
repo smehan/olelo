@@ -19,7 +19,7 @@ class Processor(object):
     """
     This class reads in the html source of the dict and transforms it into usable string: encoded data.
     """
-    ULUDICTSRCPATH = 'ulu-dict/'
+    ULUDICTSRCPATH = '../ulu-dict/'
 
     def __init__(self,):
         """Constructor for Processor"""
@@ -35,6 +35,8 @@ class Processor(object):
         :param p: bs4: object formed from page
         :return: list: references to headword elements in page as bs4 tags
         """
+        if not isinstance(p, BeautifulSoup):
+            raise TypeError
         elements = []
         for d in p.find_all("div"):
             if 'id' in d.attrs:
@@ -61,7 +63,7 @@ class Processor(object):
     def build_entry(entry):
         """
         Given an entry bs4 tag, will parse entry and return a dict of the 
-        head word and content, including ref id from src.
+        head word and content, including ref id from processor.
         :param entry: bs4: tag found in original source
         :return: dict: entry
         """
