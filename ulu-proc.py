@@ -17,7 +17,7 @@ from bs4 import BeautifulSoup
 
 class Processor(object):
     """
-    This class reads in the html source of the dict and transforms it into usable string encoded data.
+    This class reads in the html source of the dict and transforms it into usable string: encoded data.
     """
     ULUDICTSRCPATH = 'ulu-dict/'
 
@@ -32,11 +32,11 @@ class Processor(object):
     def get_dict_entries(p):
         """
         given a bs4 object with the dictionary html, will return all of the headword elements in the page
-        :param p: bs4 object formed from page
-        :return: list of references to headword elements in page as bs4 tags
+        :param p: bs4: object formed from page
+        :return: list: references to headword elements in page as bs4 tags
         """
         elements = []
-        for d in page.find_all("div"):
+        for d in p.find_all("div"):
             if 'id' in d.attrs:
                 elements.append(d)
         return elements
@@ -47,7 +47,7 @@ class Processor(object):
         method to parse and extract the head word and 
         definitions from the entry.
         :param entry: string from original page source entry
-        :return: string of head word, string of content
+        :return: string: head word, string: content
         """
         if entry is None or entry == '':
             return None, None
@@ -62,8 +62,8 @@ class Processor(object):
         """
         Given an entry bs4 tag, will parse entry and return a dict of the 
         head word and content, including ref id from src.
-        :param entry: bs4 tag found in original source
-        :return: dict of entry
+        :param entry: bs4: tag found in original source
+        :return: dict: entry
         """
         # Firstly, we check to see if this is a word definition. Other cases not handled are
         # letter definition or general text
