@@ -29,7 +29,7 @@ class Processor(object):
             return BeautifulSoup(f.read(), 'html.parser')
 
     @staticmethod
-    def get_dict_entries(p):
+    def get_dict_entries(p: BeautifulSoup) -> list:
         """
         given a bs4 object with the dictionary html, will return all of the headword elements in the page
         :param p: bs4: object formed from page
@@ -44,7 +44,7 @@ class Processor(object):
         return elements
 
     @staticmethod
-    def parse_content(entry):
+    def parse_content(entry: str) -> (str, str):
         """
         method to parse and extract the head word and 
         definitions from the entry.
@@ -60,7 +60,7 @@ class Processor(object):
         return hw, rest
 
     @staticmethod
-    def build_entry(entry):
+    def build_entry(entry: BeautifulSoup) -> dict:
         """
         Given an entry bs4 tag, will parse entry and return a dict of the 
         head word and content, including ref id from processor.
