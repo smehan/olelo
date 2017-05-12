@@ -12,24 +12,40 @@ import pytest
 
 # app modules
 from processor.ulu_processor import Processor
+from .processor_resources import SRC_HTML, SRC_TEXT
 
 # def test_get_src():
 #     p = Processor()
 #     assert p.get_src()
 
 
-@pytest.fixture(scope='module')
+@pytest.fixture(scope='class')
 def p():
-    return Processor()
+    return Processor(path='tests/', names='processor_src.html')
+
+
+@pytest.fixture(scope='class')
+def src_html() -> str:
+    return SRC_HTML
+
+
+@pytest.fixture(scope='class')
+def src_text():
+    return SRC_TEXT
 
 
 class TestProcessor(object):
 
-    def setup_class(self):
-        p = Processor()
+    @classmethod
+    def setup_class(cls):
+        print("\nThis is the setup in the class...\n\n")
 
-    def teardown_class(self):
+    @classmethod
+    def teardown_class(cls):
         pass
+
+    def test_get_src(self, p):
+        assert p.get_src().text == src_text()
 
     def test_get_dict_entries(self, p):
         with pytest.raises(TypeError):
@@ -41,3 +57,5 @@ class TestProcessor(object):
 
     def test_build_entry(self):
         pass
+
+

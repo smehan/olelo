@@ -20,12 +20,22 @@ class Processor(object):
     This class reads in the html source of the dict and transforms it into usable string: encoded data.
     """
     ULUDICTSRCPATH = '../ulu-dict/'
+    ULUDICTSRCFILES = 'puk-1.html'
 
-    def __init__(self,):
+    def __init__(self, path=None, names=None):
         """Constructor for Processor"""
+        if path is None:
+            self.srcpath = self.ULUDICTSRCPATH
+        elif path:
+            self.srcpath = path
+        # TODO this will break for more than one file passed as a param
+        if names is None:
+            self.fname = self.ULUDICTSRCFILES
+        elif names:
+            self.fname = names
 
     def get_src(self):
-        with open(os.path.join(self.ULUDICTSRCPATH, 'puk-1.html'), 'r') as f:
+        with open(os.path.join(self.srcpath, self.fname), 'r') as f:
             return BeautifulSoup(f.read(), 'html.parser')
 
     @staticmethod
@@ -81,3 +91,4 @@ if __name__ == '__main__':
     refs = ulu_proc.get_dict_entries(page)
     for r in refs:
         print(ulu_proc.build_entry(r))
+
