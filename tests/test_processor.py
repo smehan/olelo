@@ -52,8 +52,13 @@ class TestProcessor(object):
             p.get_dict_entries(1)
             p.get_dict_entries('some text')
 
-    def test_parse_content(self):
-        pass
+    def test_parse_content(self, p):
+        assert p.parse_content('') == (None, None)
+        assert p.parse_content(None) == (None, None)
+        assert p.parse_content('''a 
+1. prep. Of, acquired by. This a forms part of the possessives, as in ka'u, mine, and kāna, his. (Gram. 9.6.1.)ʻUmi-a-Līloa, ʻUmi, [son] of Līloa. Hale-a-ka-lā, house acquired [or used] by the sun [mountain name]. (PPN ʻa.)
+2. (Cap.) nvs. Abbreviation of ʻākau, north, as in surveying reports.
+''') == ('a', ["1. prep. Of, acquired by. This a forms part of the possessives, as in ka'u, mine, and kāna, his. (Gram. 9.6.1.)ʻUmi-a-Līloa, ʻUmi, [son] of Līloa. Hale-a-ka-lā, house acquired [or used] by the sun [mountain name]. (PPN ʻa.)", '2. (Cap.) nvs. Abbreviation of ʻākau, north, as in surveying reports.'])
 
     def test_build_entry(self):
         pass
