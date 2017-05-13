@@ -55,7 +55,7 @@ class TestProcessor(object):
 2. (Cap.) nvs. Abbreviation of ʻākau, north, as in surveying reports.
 ''') == ('a', ["1. prep. Of, acquired by. This a forms part of the possessives, as in ka'u, mine, and kāna, his. (Gram. 9.6.1.)ʻUmi-a-Līloa, ʻUmi, [son] of Līloa. Hale-a-ka-lā, house acquired [or used] by the sun [mountain name]. (PPN ʻa.)", '2. (Cap.) nvs. Abbreviation of ʻākau, north, as in surveying reports.'])
 
-    def test_build_entry(self, p):
+    def test_build_entry(self):
         pass
 
 
