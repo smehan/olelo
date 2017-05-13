@@ -20,11 +20,6 @@ from .processor_resources import SRC_HTML, SRC_TEXT
 
 
 @pytest.fixture(scope='class')
-def p():
-    return Processor(path='tests/', names='processor_src.html')
-
-
-@pytest.fixture(scope='class')
 def src_html() -> str:
     return SRC_HTML
 
@@ -36,31 +31,31 @@ def src_text():
 
 class TestProcessor(object):
 
-    @classmethod
-    def setup_class(cls):
+    def setup_class(self):
         print("\nThis is the setup in the class...\n\n")
+        self.p = Processor(path='tests/', names='processor_src.html')
 
     @classmethod
     def teardown_class(cls):
         pass
 
-    def test_get_src(self, p):
-        assert p.get_src().text == src_text()
+    def test_get_src(self):
+        assert self.p.get_src().text == src_text()
 
-    def test_get_dict_entries(self, p):
+    def test_get_dict_entries(self):
         with pytest.raises(TypeError):
-            p.get_dict_entries(1)
-            p.get_dict_entries('some text')
+            self.p.get_dict_entries(1)
+            self.p.get_dict_entries('some text')
 
-    def test_parse_content(self, p):
-        assert p.parse_content('') == (None, None)
-        assert p.parse_content(None) == (None, None)
-        assert p.parse_content('''a 
+    def test_parse_content(self):
+        assert self.p.parse_content('') == (None, None)
+        assert self.p.parse_content(None) == (None, None)
+        assert self.p.parse_content('''a 
 1. prep. Of, acquired by. This a forms part of the possessives, as in ka'u, mine, and kāna, his. (Gram. 9.6.1.)ʻUmi-a-Līloa, ʻUmi, [son] of Līloa. Hale-a-ka-lā, house acquired [or used] by the sun [mountain name]. (PPN ʻa.)
 2. (Cap.) nvs. Abbreviation of ʻākau, north, as in surveying reports.
 ''') == ('a', ["1. prep. Of, acquired by. This a forms part of the possessives, as in ka'u, mine, and kāna, his. (Gram. 9.6.1.)ʻUmi-a-Līloa, ʻUmi, [son] of Līloa. Hale-a-ka-lā, house acquired [or used] by the sun [mountain name]. (PPN ʻa.)", '2. (Cap.) nvs. Abbreviation of ʻākau, north, as in surveying reports.'])
 
-    def test_build_entry(self):
+    def test_build_entry(self, p):
         pass
 
 
