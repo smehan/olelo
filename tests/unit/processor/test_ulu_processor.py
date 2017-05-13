@@ -5,14 +5,14 @@
 #  -*- coding: utf-8 -*-
 
 # standard modules
-from unittest import TestCase
 
 # 3rd-party modules
 import pytest
 
 # app modules
 from processor.ulu_processor import Processor
-from .processor_resources import SRC_HTML, SRC_TEXT
+from tests.unit.processor.processor_resources import SRC_HTML, SRC_TEXT
+
 
 # def test_get_src():
 #     p = Processor()
@@ -33,7 +33,7 @@ class TestProcessor(object):
 
     def setup_class(self):
         print("\nThis is the setup in the class...\n\n")
-        self.p = Processor(path='tests/', names='processor_src.html')
+        self.p = Processor(path='tests/unit/processor', names='processor_src.html')
 
     @classmethod
     def teardown_class(cls):
