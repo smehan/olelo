@@ -46,7 +46,7 @@ class Processor(object):
         :return: list: references to headword elements in page as bs4 tags
         """
         if not isinstance(p, BeautifulSoup):
-            raise TypeError
+            raise TypeError(f'{p}: {type(p)} needs to be :BeautifulSoup')
         elements = []
         for d in p.find_all("div"):
             if 'id' in d.attrs:
@@ -79,6 +79,8 @@ class Processor(object):
         """
         # Firstly, we check to see if this is a word definition. Other cases not handled are
         # letter definition or general text
+        if not isinstance(entry, BeautifulSoup):
+            raise TypeError(f'{entry}: {type(entry)} needs to be :BeautifulSoup')
         if '.' in entry['id']:
             head_word, content = ulu_proc.parse_content(entry.text)
             if head_word and content is not None:
