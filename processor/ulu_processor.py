@@ -7,12 +7,12 @@
 
 # standard libs
 import os
-import string
 
 # 3rd-party libs
 from bs4 import BeautifulSoup
 
 # application libs
+#from .grammar import HAW_POS
 
 
 class Processor(object):
@@ -70,27 +70,51 @@ class Processor(object):
         return hw, rest
 
     @staticmethod
-    def build_entry(entry: BeautifulSoup) -> dict:
+    def build_entry(entry) -> dict:
         """
-        Given an entry bs4 tag, will parse entry and return a dict of the 
+        Given a bs4 tag: entry, will parse entry and return a dict of the 
         head word and content, including ref id from processor.
-        :param entry: bs4: tag found in original source
+        :param entry: bs4 tag object found in original source
         :return: dict: entry
         """
         # Firstly, we check to see if this is a word definition. Other cases not handled are
         # letter definition or general text
-        if not isinstance(entry, BeautifulSoup):
-            raise TypeError(f'{entry}: {type(entry)} needs to be :BeautifulSoup')
         if '.' in entry['id']:
             head_word, content = ulu_proc.parse_content(entry.text)
             if head_word and content is not None:
                 return {head_word: {'content': content, 'id': entry['id'] }}
 
 
+    @staticmethod
+    def find_pos(s: str) -> str:
+        """
+        Take a string and find the HAW_POS in that string and return.
+        :param s: 
+        :return: 
+        """
+        return 'noun'
+
+    def build_pos(self, e: dict) -> dict:
+        """
+        Parse an entry and get all Parts-of-speech and annotate the entry
+        with the POS.
+        :param e: 
+        :return: 
+        """
+        if e is None:
+            return None, None
+        (hw, payload), = e.items()
+        payload['pos'] = [self.find_pos(item for item in payload['content'])]
+        return hw, payload
+
 if __name__ == '__main__':
     ulu_proc = Processor()
     page = ulu_proc.get_src()
     refs = ulu_proc.get_dict_entries(page)
-    for r in refs:
-        print(ulu_proc.build_entry(r))
+    words = (ulu_proc.build_entry(r) for r in refs)
+    new_words = {}
+    for w in words:
+        hw, payload = ulu_proc.build_pos(w)
+        new_words.update({hw: payload})
+    print(new_words)
 
