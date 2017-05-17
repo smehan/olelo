@@ -11,7 +11,12 @@
 
 # application libs
 
-HAW_POS = {'noun': 'n.',
+# Want to build a single dict for all dict abbrevs.
+# Need to be able to find symbol for all entries.
+# Not certain how to match compound symbol to multiple entries, e.g.
+# nvi. 1. a thing; to be a thing....
+
+HAW_POS = {'noun': ['n.', 'nvi.', 'nvt.', 'nvs.'],
            'interjection': 'interj.',
            'verb': 'v.',
            'intransitive verb': 'vi',
@@ -28,7 +33,7 @@ HAW_POS = {'noun': 'n.',
            'frequantive': 'freq',
            'imperative': 'imper',
            'literally': 'Lit.',
-           'pronoun': 'pro.',
+           'pronoun': ['pro.', 'pronoun.'],
            'preposition': 'prep',
            'perfect participle': 'perf.part.',
            'synonym': 'Syn'}

@@ -58,11 +58,15 @@ class TestProcessor(object):
     def test_build_entry(self):
         pass
 
+    def test_get_pos(self):
+        assert self.p.get_pos(None) == None
+
+
     def test_build_pos(self):
-        test_entry = {'apo pāpale': {'content': ['n. Hatband.'], 'id': 'A.1456'}}
+        assert self.p.build_pos(None) == (None, None)
+        # {'apo pāpale': {'content': ['n. Hatband.'], 'id': 'A.1456'}}
         assert self.p.build_pos({'apo pāpale': {'content': ['n. Hatband.'], 'id': 'A.1456'}}) == \
                ('apo pāpale', {'content': ['n. Hatband.'], 'id': 'A.1456', 'pos': ['noun']})
-        assert self.p.build_pos(None) == (None, None)
 
 
 

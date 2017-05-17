@@ -10,6 +10,7 @@ import os
 
 # 3rd-party libs
 from bs4 import BeautifulSoup
+import pprint
 
 # application libs
 #from .grammar import HAW_POS
@@ -84,15 +85,19 @@ class Processor(object):
             if head_word and content is not None:
                 return {head_word: {'content': content, 'id': entry['id'] }}
 
-
     @staticmethod
-    def find_pos(s: str) -> str:
+    def get_pos(s: str) -> str:
         """
         Take a string and find the HAW_POS in that string and return.
-        :param s: 
+        :param s: str with definition contents: 'n. Hatband.'
         :return: 
         """
-        return 'noun'
+        if s is None:
+            return None
+        if 'n.' in s:
+            return 'noun'
+        #print(s)
+        return 'tbd'
 
     def build_pos(self, e: dict) -> dict:
         """
@@ -104,17 +109,24 @@ class Processor(object):
         if e is None:
             return None, None
         (hw, payload), = e.items()
-        payload['pos'] = [self.find_pos(item for item in payload['content'])]
+        payload['pos'] = [self.get_pos(item) for item in payload['content']]
         return hw, payload
+
+    def build_dict(self):
+        page = self.get_src()
+        refs = self.get_dict_entries(page)
+        words = (self.build_entry(r) for r in refs)
+        new_words = {}
+        for w in words:
+            hw, payload = self.build_pos(w)
+            new_words.update({hw: payload})
+        return new_words
 
 if __name__ == '__main__':
     ulu_proc = Processor()
-    page = ulu_proc.get_src()
-    refs = ulu_proc.get_dict_entries(page)
-    words = (ulu_proc.build_entry(r) for r in refs)
-    new_words = {}
-    for w in words:
-        hw, payload = ulu_proc.build_pos(w)
-        new_words.update({hw: payload})
-    print(new_words)
+    new_dic = ulu_proc.build_dict()
+    pp = pprint.PrettyPrinter(indent=4)
+    pp.pprint(new_dic)
+
+
 
