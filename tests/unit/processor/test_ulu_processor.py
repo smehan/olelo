@@ -67,7 +67,10 @@ class TestProcessor(object):
         # {'apo pāpale': {'content': ['n. Hatband.'], 'id': 'A.1456'}}
         assert self.p.build_pos({'apo pāpale': {'content': ['n. Hatband.'], 'id': 'A.1456'}}) == \
                ('apo pāpale', {'content': ['n. Hatband.'], 'id': 'A.1456', 'pos': ['noun']})
-
+        assert self.p.build_pos({'apo pāpale': {'content': ['n. Hatband.'], 'id': 'A.1456'}}) != \
+               ('apo pāpale', {'content': ['n. Hatband.'], 'id': 'A.1456', 'pos': ['stative verb']})
+        assert self.p.build_pos({'apo pāpale': {'content': ['n. Hatband.'], 'id': 'A.1456'}}) != \
+               ('apo pāpale', {'content': ['n. Hatband.'], 'id': 'A.1456', 'pos': ['noun', 'stative verb']})
 
 
 

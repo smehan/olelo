@@ -94,10 +94,14 @@ class Processor(object):
         """
         if s is None:
             return None
-        if 'n.' in s:
-            return 'noun'
-        print(s)
-        return 'tbd'
+        all_pos = []
+        for pos, abbrevs in HAW_POS.items():
+            for e in abbrevs:
+                if e in s:
+                    all_pos.append(pos)
+        if len(all_pos) == 0:
+            all_pos.append('tbd')
+        return all_pos
 
     def build_pos(self, e: dict) -> dict:
         """
@@ -109,7 +113,7 @@ class Processor(object):
         if e is None:
             return None, None
         (hw, payload), = e.items()
-        payload['pos'] = [self.get_pos(item) for item in payload['content']]
+        payload['pos'] = [pos for item in payload['content'] for pos in self.get_pos(item)]
         return hw, payload
 
     def build_dict(self):
