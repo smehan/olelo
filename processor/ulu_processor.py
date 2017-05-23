@@ -113,7 +113,7 @@ class Processor(object):
         if e is None:
             return None, None
         (hw, payload), = e.items()
-        payload['pos'] = [pos for item in payload['content'] for pos in self.get_pos(item)]
+        payload['pos'] = sorted([pos for item in payload['content'] for pos in self.get_pos(item)])
         return hw, payload
 
     def build_dict(self):

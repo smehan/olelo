@@ -54,6 +54,18 @@ class TestProcessor(object):
 1. prep. Of, acquired by. This a forms part of the possessives, as in ka'u, mine, and kāna, his. (Gram. 9.6.1.)ʻUmi-a-Līloa, ʻUmi, [son] of Līloa. Hale-a-ka-lā, house acquired [or used] by the sun [mountain name]. (PPN ʻa.)
 2. (Cap.) nvs. Abbreviation of ʻākau, north, as in surveying reports.
 ''') == ('a', ["1. prep. Of, acquired by. This a forms part of the possessives, as in ka'u, mine, and kāna, his. (Gram. 9.6.1.)ʻUmi-a-Līloa, ʻUmi, [son] of Līloa. Hale-a-ka-lā, house acquired [or used] by the sun [mountain name]. (PPN ʻa.)", '2. (Cap.) nvs. Abbreviation of ʻākau, north, as in surveying reports.'])
+    # TODO somewhere this is getting output as multiple strings in a list in content
+    """
+        'ʻāwaʻa': {   'content': [   'nvt. Long, narrow excavation, trench, ditch, '
+                                 'gully; to dig a ditch or furrow.'],
+                  'id': 'A.1671',
+                  'pos': ['noun', 'transitive verb']},
+                  
+          'ʻāpā': {   'content': [   'n.',
+                   '1. Roll or ream, as of paper; bolt, as of '
+                   'cloth.',
+                   '2. See lima ʻāpā.'],
+    """
 
     def test_build_entry(self):
         pass
@@ -73,5 +85,10 @@ class TestProcessor(object):
         # {'ʻāʻīʻoʻoleʻa': {'content': ['nvs. Stiff neck. Fig., disobedience, obstinacy; obstinate.'], 'id': 'A.514'}}
         assert self.p.build_pos({'ʻāʻīʻoʻoleʻa': {'content': ['nvs. Stiff neck. Fig., disobedience, obstinacy; obstinate.'], 'id': 'A.514'}}) == \
                ('ʻāʻīʻoʻoleʻa', {'content': ['nvs. Stiff neck. Fig., disobedience, obstinacy; obstinate.'], 'id': 'A.514', 'pos': ['noun', 'stative verb']})
-
+        # TODO this should be ['noun']
+        """    'ʻāpā': {   'content': [   'n.',
+                               '1. Roll or ream, as of paper; bolt, as of '
+                               'cloth.',
+                               '2. See lima ʻāpā.'],
+        """
 
