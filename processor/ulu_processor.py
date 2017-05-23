@@ -13,7 +13,7 @@ from bs4 import BeautifulSoup
 import pprint
 
 # application libs
-#from .grammar import HAW_POS
+from grammar import HAW_POS
 
 
 class Processor(object):
@@ -96,7 +96,7 @@ class Processor(object):
             return None
         if 'n.' in s:
             return 'noun'
-        #print(s)
+        print(s)
         return 'tbd'
 
     def build_pos(self, e: dict) -> dict:

@@ -16,6 +16,8 @@
 # Not certain how to match compound symbol to multiple entries, e.g.
 # nvi. 1. a thing; to be a thing....
 
+__all__ = ['HAW_POS']
+
 HAW_POS = {'noun': ['n.', 'nvi.', 'nvt.', 'nvs.'],
            'interjection': 'interj.',
            'verb': 'v.',
@@ -38,5 +40,6 @@ HAW_POS = {'noun': ['n.', 'nvi.', 'nvt.', 'nvs.'],
            'perfect participle': 'perf.part.',
            'synonym': 'Syn'}
 
+
 if __name__ == '__main__':
-    pass
+    print(f"This is {__name__}")
