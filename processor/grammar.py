@@ -1,6 +1,7 @@
 ###########################################################
 # Copyright (C) 2017 Shawn Mehan <shawn dot mehan at shawnmehan dot com>
-# Processor for transforming source html into usable data
+# Processor for transforming source html into usable data.
+# This module defines general grammatical maps and constants
 ###########################################################
 #
 #  -*- coding: utf-8 -*-
@@ -39,6 +40,8 @@ HAW_POS = {'noun': ['n.', 'nvi.', 'nvt.', 'nvs.'],
            'preposition': ['prep.'],
            'perfect participle': ['perf.part.'],
            'synonym': ['Syn']}
+
+DIGITS = ['0123456789']
 
 
 if __name__ == '__main__':
