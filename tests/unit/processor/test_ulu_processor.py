@@ -61,7 +61,6 @@ class TestProcessor(object):
     def test_get_pos(self):
         assert self.p.get_pos(None) == None
 
-
     def test_build_pos(self):
         assert self.p.build_pos(None) == (None, None)
         # {'apo pāpale': {'content': ['n. Hatband.'], 'id': 'A.1456'}}
@@ -71,6 +70,8 @@ class TestProcessor(object):
                ('apo pāpale', {'content': ['n. Hatband.'], 'id': 'A.1456', 'pos': ['stative verb']})
         assert self.p.build_pos({'apo pāpale': {'content': ['n. Hatband.'], 'id': 'A.1456'}}) != \
                ('apo pāpale', {'content': ['n. Hatband.'], 'id': 'A.1456', 'pos': ['noun', 'stative verb']})
-
+        # {'ʻāʻīʻoʻoleʻa': {'content': ['nvs. Stiff neck. Fig., disobedience, obstinacy; obstinate.'], 'id': 'A.514'}}
+        assert self.p.build_pos({'ʻāʻīʻoʻoleʻa': {'content': ['nvs. Stiff neck. Fig., disobedience, obstinacy; obstinate.'], 'id': 'A.514'}}) == \
+               ('ʻāʻīʻoʻoleʻa', {'content': ['nvs. Stiff neck. Fig., disobedience, obstinacy; obstinate.'], 'id': 'A.514', 'pos': ['noun', 'stative verb']})
 
 

@@ -97,7 +97,7 @@ class Processor(object):
         all_pos = []
         for pos, abbrevs in HAW_POS.items():
             for e in abbrevs:
-                if e in s:
+                if e in s and pos not in all_pos:
                     all_pos.append(pos)
         if len(all_pos) == 0:
             all_pos.append('tbd')
