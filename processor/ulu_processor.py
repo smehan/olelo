@@ -9,7 +9,7 @@
 import os
 
 # 3rd-party libs
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup, Tag
 import pprint
 
 # application libs
@@ -35,7 +35,7 @@ class Processor(object):
         elif names:
             self.fname = names
 
-    def get_src(self):
+    def get_src(self) -> BeautifulSoup:
         with open(os.path.join(self.srcpath, self.fname), 'r') as f:
             return BeautifulSoup(f.read(), 'html.parser')
 
@@ -71,7 +71,22 @@ class Processor(object):
         return hw, rest
 
     @staticmethod
-    def build_entry(entry) -> dict:
+    def mark_haw(tag: Tag) -> str:
+        """
+        Takes a bs4 Tag object and returns a str with <HAW>words</HAW>
+        :param tag: 
+        :return: 
+        """
+        words_to_mark = tag.find('span', {'lang': 'HAW'}).decode_contents(formatter='html').strip()
+        for e in tag.find_all('span'):
+            if e.get('lang') is None:
+                continue
+            elif e.get('lang') == 'HAW':
+                e.insert_before('<HAW>')
+                e.insert_after(('</HAW>'))
+        return e.text
+
+    def build_entry(self, entry: Tag) -> dict:
         """
         Given a bs4 tag: entry, will parse entry and return a dict of the 
         head word and content, including ref id from processor.
@@ -81,9 +96,13 @@ class Processor(object):
         # Firstly, we check to see if this is a word definition. Other cases not handled are
         # letter definition or general text
         if '.' in entry['id']:
-            head_word, content = ulu_proc.parse_content(entry.text)
+            # FIXME now content is returning only HAW tagged content.
+            marked_content_haw = self.mark_haw(entry)
+            head_word, content = self.parse_content(entry.text)
             if head_word and content is not None:
-                return {head_word: {'content': content, 'id': entry['id'] }}
+                return {head_word.strip(): {'content': content,
+                                            'marked_content_haw': [],
+                                            'id': entry['id']}}
 
     @staticmethod
     def get_pos(s: str) -> str:
@@ -99,6 +118,7 @@ class Processor(object):
             for e in abbrevs:
                 if e in s and pos not in all_pos:
                     all_pos.append(pos)
+        # if there is no result for pos, mark it tbd
         if len(all_pos) == 0:
             all_pos.append('tbd')
         return all_pos

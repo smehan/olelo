@@ -36,7 +36,7 @@ HAW_POS = {'noun': ['n.', 'nvi.', 'nvt.', 'nvs.'],
            'frequantive': ['freq.'],
            'imperative': ['imper.'],
            'literally': ['Lit.'],
-           'pronoun': ['pro.', 'pronoun.'],
+           'pronoun': ['pro.', 'pronoun'],
            'preposition': ['prep.'],
            'perfect participle': ['perf.part.'],
            'synonym': ['Syn']}

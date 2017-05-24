@@ -14,11 +14,6 @@ from processor.ulu_processor import Processor
 from tests.unit.processor.processor_resources import SRC_HTML, SRC_TEXT
 
 
-# def test_get_src():
-#     p = Processor()
-#     assert p.get_src()
-
-
 @pytest.fixture(scope='class')
 def src_html() -> str:
     return SRC_HTML
@@ -32,7 +27,7 @@ def src_text():
 class TestProcessor(object):
 
     def setup_class(self):
-        print("\nThis is the setup in the class...\n\n")
+        print("\nTestProcessor settuing up ...\n\n")
         self.p = Processor(path='tests/unit/processor', names='processor_src.html')
 
     @classmethod
@@ -53,7 +48,8 @@ class TestProcessor(object):
         assert self.p.parse_content('''a 
 1. prep. Of, acquired by. This a forms part of the possessives, as in ka'u, mine, and kāna, his. (Gram. 9.6.1.)ʻUmi-a-Līloa, ʻUmi, [son] of Līloa. Hale-a-ka-lā, house acquired [or used] by the sun [mountain name]. (PPN ʻa.)
 2. (Cap.) nvs. Abbreviation of ʻākau, north, as in surveying reports.
-''') == ('a', ["1. prep. Of, acquired by. This a forms part of the possessives, as in ka'u, mine, and kāna, his. (Gram. 9.6.1.)ʻUmi-a-Līloa, ʻUmi, [son] of Līloa. Hale-a-ka-lā, house acquired [or used] by the sun [mountain name]. (PPN ʻa.)", '2. (Cap.) nvs. Abbreviation of ʻākau, north, as in surveying reports.'])
+''') == ('a', ["1. prep. Of, acquired by. This a forms part of the possessives, as in ka'u, mine, and kāna, his. (Gram. 9.6.1.)ʻUmi-a-Līloa, ʻUmi, [son] of Līloa. Hale-a-ka-lā, house acquired [or used] by the sun [mountain name]. (PPN ʻa.)",
+               '2. (Cap.) nvs. Abbreviation of ʻākau, north, as in surveying reports.'])
     # TODO somewhere this is getting output as multiple strings in a list in content
     """
         'ʻāwaʻa': {   'content': [   'nvt. Long, narrow excavation, trench, ditch, '
@@ -68,7 +64,32 @@ class TestProcessor(object):
     """
 
     def test_build_entry(self):
-        pass
+        """,
+              ["1. prep. Of, acquired by. This <HAW>a</HAW> forms part of the possessives, as in <HAW>ka'u</HAW>, mine, and <HAW>kāna</HAW>, his. (Gram. 9.6.1.)<HAW>ʻUmi-a-Līloa</HAW>, <HAW>ʻUmi</HAW>, [son] of <HAW>Līloa</HAW>. <HAW>Hale-a-ka-lā</HAW>, house acquired [or used] by the sun [mountain name]. (PPN <HAW>ʻa</HAW>.)",
+               '2. (Cap.) nvs. Abbreviation of <HAW>ʻākau</HAW>, north, as in surveying reports.']
+        """
+        page = self.p.get_src()
+        refs = self.p.get_dict_entries(page)
+        for r in refs:
+            """
+            {'a': {'content': ["1. prep. Of, acquired by. This a forms part of the possessives, as in ka'u, mine, and kāna, his. (Gram. 9.6.1.)ʻUmi-a-Līloa, ʻUmi, [son] of Līloa. Hale-a-ka-lā, house acquired [or used] by the sun [mountain name]. (PPN ʻa.)", 
+                               '2. (Cap.) nvs. Abbreviation of ʻākau, north, as in surveying reports.'], 
+                   'id': 'A.1'}}
+            """
+            if r.get('id') == 'A.1':
+                print('testing new test')
+                test_1 = r
+        assert self.p.build_entry(test_1) == {'a': {'content': ["1. prep. Of, acquired by. This a forms part of the possessives, as in ka'u, mine, and kāna, his. (Gram. 9.6.1.)ʻUmi-a-Līloa, ʻUmi, [son] of Līloa. Hale-a-ka-lā, house acquired [or used] by the sun [mountain name]. (PPN ʻa.)",
+                                                                '2. (Cap.) nvs. Abbreviation of ʻākau, north, as in surveying reports.'],
+                                                    'marked_content_haw': ["1. prep. Of, acquired by. This a forms part of the possessives, as in <HAW>ka'u</HAW>, mine, and <HAW>kāna</HAW>, his. (Gram. 9.6.1.)<HAW>ʻUmi-a-Līloa</HAW>, <HAW>ʻUmi</HAW>, [son] of <HAW>Līloa</HAW>. <HAW>Hale-a-ka-lā</HAW>, house acquired [or used] by the sun [mountain name]. (PPN <HAW>ʻa</HAW>.)",
+                                                                           '2. (Cap.) nvs. Abbreviation of <HAW>ʻākau</HAW>, north, as in surveying reports.'],
+                                                    'id': 'A.1'}}
+
+
+        #assert self.p.build_entry(r) == {'apo pāpale', {'content': ['n. Hatband.'], 'id': 'A.1456'}}
+        # words = (self.build_entry(r) for r in refs)
+        # assert self.p.build_entry({'apo pāpale': {'content': ['n. Hatband.'], 'id': 'A.1456'}}) == \
+        #        ('apo pāpale', {'content': ['n. Hatband.'], 'id': 'A.1456', 'pos': ['noun']})
 
     def test_get_pos(self):
         assert self.p.get_pos(None) == None
@@ -90,5 +111,15 @@ class TestProcessor(object):
                                '1. Roll or ream, as of paper; bolt, as of '
                                'cloth.',
                                '2. See lima ʻāpā.'],
+        """
+        # TODO this should not have tbd but is at least in part due to split lines
+        """
+            'ʻāwikiwiki': {   'content': [   '1. Redup. of ʻāwiki.',
+                                     '2. n.. A vine (Canavalia spp.), native '
+                                     'to Hawaiʻi, related to the maunaloa (C. '
+                                     'cathartica), but with narrower pods; '
+                                     'used for small, temporary fish traps. '
+                                     'Also puakauhi.',
+                                     '3. Same as kōʻeleʻele, a seaweed.'],
         """
 
