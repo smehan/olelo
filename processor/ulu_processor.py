@@ -7,6 +7,7 @@
 
 # standard libs
 import os
+import copy
 
 # 3rd-party libs
 from bs4 import BeautifulSoup, Tag
@@ -77,14 +78,14 @@ class Processor(object):
         :param tag: 
         :return: 
         """
-        words_to_mark = tag.find('span', {'lang': 'HAW'}).decode_contents(formatter='html').strip()
+        #tag = copy.copy(original_tag)
         for e in tag.find_all('span'):
             if e.get('lang') is None:
                 continue
             elif e.get('lang') == 'HAW':
                 e.insert_before('<HAW>')
                 e.insert_after(('</HAW>'))
-        return e.text
+        return tag.text
 
     def build_entry(self, entry: Tag) -> dict:
         """
@@ -96,12 +97,12 @@ class Processor(object):
         # Firstly, we check to see if this is a word definition. Other cases not handled are
         # letter definition or general text
         if '.' in entry['id']:
-            # FIXME now content is returning only HAW tagged content.
-            marked_content_haw = self.mark_haw(entry)
             head_word, content = self.parse_content(entry.text)
+            # need to pass a copy of entry to mark_haw to keep tag from being mutated
+            _, marked_content_haw = self.parse_content(self.mark_haw(copy.copy(entry)))
             if head_word and content is not None:
                 return {head_word.strip(): {'content': content,
-                                            'marked_content_haw': [],
+                                            'marked_content_haw': marked_content_haw,
                                             'id': entry['id']}}
 
     @staticmethod
