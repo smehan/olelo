@@ -8,6 +8,7 @@
 # standard libs
 import os
 import copy
+from collections import Counter
 
 # 3rd-party libs
 from bs4 import BeautifulSoup, Tag
@@ -172,6 +173,8 @@ class Processor(object):
     def build_dict(self):
         words = self.prepare_source()
         new_words = self.make_dict(words)
+        # ensure that there are no Nones in the dict
+        new_words.pop(None)
         return new_words
 
 if __name__ == '__main__':
@@ -179,6 +182,10 @@ if __name__ == '__main__':
     new_dic = ulu_proc.build_dict()
     pp = pprint.PrettyPrinter(indent=4)
     pp.pprint(new_dic)
+    haw_words = Counter(new_dic.keys())
+    pp.pprint(haw_words)
+    print(sum((1 for w in haw_words.keys() if w is not None)))
+
 
 
 
