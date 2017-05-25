@@ -146,14 +146,32 @@ class Processor(object):
         payload['pos'] = sorted([pos for item in payload['content'] for pos in self.get_pos(item)])
         return hw, payload
 
-    def build_dict(self):
+    def prepare_source(self):
+        """
+        Read in source html, parse the html and 
+        build a generator for all entries in the source
+        :return: generator
+        """
         page = self.get_src()
         refs = self.get_dict_entries(page)
-        words = (self.build_entry(r) for r in refs)
-        new_words = {}
-        for w in words:
-            hw, payload = self.build_pos(w)
-            new_words.update({hw: payload})
+        return (self.build_entry(r) for r in refs)
+
+    def make_dict(self, source_dict: dict) -> dict:
+        """
+        Take the parsed entries from html source and 
+        form a dict with appropriate attrs.
+        :param source_dict: 
+        :return: 
+        """
+        output = {}
+        for entry in source_dict:
+            hw, rest = self.build_pos(entry)
+            output.update({hw: rest})
+        return output
+
+    def build_dict(self):
+        words = self.prepare_source()
+        new_words = self.make_dict(words)
         return new_words
 
 if __name__ == '__main__':
