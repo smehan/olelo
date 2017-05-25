@@ -87,6 +87,15 @@ class Processor(object):
                 e.insert_after(('</HAW>'))
         return tag.text
 
+    # TODO this is a stub
+    def build_cfs(self):
+        """
+        Take a tag and build a representation of Cf. entries in the content.
+        This will be of form 'Cf. haw_word; ...; haw_word.'
+        :return: 
+        """
+        pass
+
     def build_entry(self, entry: Tag) -> dict:
         """
         Given a bs4 tag: entry, will parse entry and return a dict of the 
