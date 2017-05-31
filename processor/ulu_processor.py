@@ -9,6 +9,7 @@
 import os
 import copy
 from collections import Counter
+import pickle
 
 # 3rd-party libs
 from bs4 import BeautifulSoup, Tag
@@ -24,6 +25,7 @@ class Processor(object):
     """
     ULUDICTSRCPATH = '../ulu-dict/'
     ULUDICTSRCFILES = 'puk-1.html'
+    TMPPATH = '../tmp/'
 
     def __init__(self, path=None, names=None):
         """Constructor for Processor"""
@@ -174,7 +176,10 @@ class Processor(object):
         words = self.prepare_source()
         new_words = self.make_dict(words)
         # ensure that there are no Nones in the dict
-        new_words.pop(None)
+        while new_words.get('None'):
+            new_words.pop(None)
+        with open(os.path.join(self.TMPPATH, 'new_words.pickle'), 'wb') as fh:
+            pickle.dump(new_words, fh)
         return new_words
 
 if __name__ == '__main__':

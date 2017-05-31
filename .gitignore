@@ -165,3 +165,6 @@ ENV/
 
 # Rope project settings
 .ropeproject
+
+# Local files/dirs
+/tmp/
