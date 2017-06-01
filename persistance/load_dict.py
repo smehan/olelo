@@ -7,13 +7,9 @@
 
 # standard libs
 import os
-import copy
-from collections import Counter
 import pickle
-import hashlib
 
 # 3rd-party libs
-import redis
 
 # application libs
 from redis_db import RedisDB
@@ -29,6 +25,9 @@ class RedisLoader(RedisDB):
         super().__init__()
         self.path = os.path.join('../tmp/', 'new_words.pickle')
 
+    def __repr__(self):
+        return f'<RedisLoader()'
+
     def _get_data(self):
         with open(self.path, 'rb') as fh:
             return pickle.load(fh)
@@ -42,16 +41,32 @@ class RedisLoader(RedisDB):
         for k, v in d.items():
             if k is None:
                 continue
-            print(k, v)
-            hw_ids = self._make_hash('haw', k)
-        r = self.rdb
-        results = r.hgetall(hw_ids)
-        for hw, hw_id in results.items():
-            print(f'{hw.decode()} has id: {hw_id.decode()}')
+            hw_ids = self._add_key_to_hash('haw', k)
+        return hw_ids
+        # r = self.rdb
+        # results = r.hgetall(hw_ids)
+        # for hw, hw_id in results.items():
+        #     print(f'{hw.decode()} has id: {hw_id.decode()}')
+
+    def _add_pos(self, d, id_hash):
+        """
+        Takes dictionary and adds pos for each entry
+        :param d: dict from processed input
+        :param id_hash: This is the name of the id hash for hawaiian hw
+        :return: 
+        """
+        all_ids = self._all_hash(id_hash).keys()
+        for hw, v in d.items():
+            if hw is None:
+                continue
+            if hw in all_ids:
+                hw_id = self._v_from_hash(id_hash, hw)
+                _ = self._add_to_set('pos', hw_id, d[hw]['pos'])
 
     def load_redis(self):
         haw_words = self._get_data()
-        self._make_hw_hash(haw_words)
+        hw_ids = self._make_hw_hash(haw_words)
+        self._add_pos(haw_words, hw_ids)
 
 
 if __name__ == '__main__':
