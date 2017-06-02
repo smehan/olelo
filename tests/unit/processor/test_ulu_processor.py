@@ -27,7 +27,7 @@ def src_text():
 class TestProcessor(object):
 
     def setup_class(self):
-        print("\nTestProcessor settuing up ...\n\n")
+        print("\nTestProcessor setting up ...\n\n")
         self.p = Processor(path='tests/unit/processor', names='processor_src.html')
 
     @classmethod
