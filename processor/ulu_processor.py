@@ -81,7 +81,6 @@ class Processor(object):
         :param tag: 
         :return: 
         """
-        #tag = copy.copy(original_tag)
         for e in tag.find_all('span'):
             if e.get('lang') is None:
                 continue
@@ -172,7 +171,12 @@ class Processor(object):
             output.update({hw: rest})
         return output
 
-    def build_dict(self):
+    def build_dict(self) -> dict:
+        """
+        reads in source html and outputs a dict with all entries.
+        Includes a serialized object on disk.
+        :return: 
+        """
         words = self.prepare_source()
         new_words = self.make_dict(words)
         # ensure that there are no Nones in the dict
@@ -189,7 +193,8 @@ if __name__ == '__main__':
     pp.pprint(new_dic)
     haw_words = Counter(new_dic.keys())
     pp.pprint(haw_words)
-    print(sum((1 for w in haw_words.keys() if w is not None)))
+    print(f'Processed {sum((1 for w in haw_words.keys() if w is not None))} '
+          f'total words in this run.')
 
 
 

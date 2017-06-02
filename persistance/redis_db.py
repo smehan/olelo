@@ -6,7 +6,6 @@
 #  -*- coding: utf-8 -*-
 
 # standard libs
-import os
 import hashlib
 
 # 3rd-party libs

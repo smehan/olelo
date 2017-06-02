@@ -48,9 +48,12 @@ class RedisLoader(RedisDB):
         # for hw, hw_id in results.items():
         #     print(f'{hw.decode()} has id: {hw_id.decode()}')
 
-    def _add_pos(self, d, id_hash):
+    def _add_pos(self, hw_id):
+        pass
+
+    def _add_parts(self, d, id_hash):
         """
-        Takes dictionary and adds pos for each entry
+        Takes dictionary and adds parts for each entry
         :param d: dict from processed input
         :param id_hash: This is the name of the id hash for hawaiian hw
         :return: 
@@ -62,11 +65,12 @@ class RedisLoader(RedisDB):
             if hw in all_ids:
                 hw_id = self._v_from_hash(id_hash, hw)
                 _ = self._add_to_set('pos', hw_id, d[hw]['pos'])
+                _ = self._add_to_set('content', hw_id, d[hw]['content'])
 
     def load_redis(self):
         haw_words = self._get_data()
         hw_ids = self._make_hw_hash(haw_words)
-        self._add_pos(haw_words, hw_ids)
+        self._add_parts(haw_words, hw_ids)
 
 
 if __name__ == '__main__':
