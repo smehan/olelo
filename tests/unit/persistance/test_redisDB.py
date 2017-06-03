@@ -16,12 +16,15 @@ from persistance.redis_db import RedisDB
 @pytest.fixture(scope='class')
 def r():
     """
-    create a redis connection object
+    create a redis connection object for the test, then cleans up
+    after the tests are finished.
     :return: 
     """
     print("\nMaking a RedisDB instance")
     r = RedisDB()
     yield r
+    r.rdb.delete('test_hash:id',
+                 'test_set:00942f4668670f34c5943cf52c7ef3139fe2b8d6')
 
 
 @pytest.fixture(scope='function')
