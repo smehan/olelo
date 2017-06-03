@@ -78,4 +78,20 @@ class TestRedisDB(object):
         assert r._add_to_set('test_set',
                              '00942f4668670f34c5943cf52c7ef3139fe2b8d6',
                              ['a', 'b', 'c']) == b'test_set:00942f4668670f34c5943cf52c7ef3139fe2b8d6'
+        with pytest.raises(ValueError):
+            r._add_to_set(None,
+                          '00942f4668670f34c5943cf52c7ef3139fe2b8d6',
+                          ['a', 'b', 'c'])
+            r._add_to_set('',
+                          '00942f4668670f34c5943cf52c7ef3139fe2b8d6',
+                          ['a', 'b', 'c'])
+            r._add_to_set('test_set',
+                          '',
+                          ['a', 'b', 'c'])
+        assert r._add_to_set('test_set',
+                             '00942f4668670f34c5943cf52c7ef3139fe2b8d6',
+                             []) == None
+        assert r._add_to_set('test_set',
+                             '00942f4668670f34c5943cf52c7ef3139fe2b8d6',
+                             None) == None
 

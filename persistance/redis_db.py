@@ -134,6 +134,8 @@ class RedisDB(object):
         rdb = self.rdb
         if name is None or name == '':
             raise ValueError("Redis set needs an id....")
+        if hash_id is None or hash_id == '':
+            raise ValueError("Redis set needs an id...")
         if values is None or len(values) == 0:
             return
         set_name = self.encode_s(':'.join([name, hash_id]))
