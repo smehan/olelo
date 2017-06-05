@@ -30,6 +30,7 @@ class Processor(object):
 
     # Regex patterns compiled here for speed
     CONTENT_POS = re.compile(r'^(?:\d+\.\s)?[a-z/A-Z]+\.')
+    CONTENT_DEF = re.compile(r'')
 
     def __init__(self, path=None, names=None):
         """Constructor for Processor"""
@@ -143,25 +144,57 @@ class Processor(object):
             all_pos.append('tbd')
         return all_pos
 
-    def build_pos(self, contents: dict) -> list:
+    def build_pos(self, contents: list) -> list:
         """
-        Parse an entry and get all Parts-of-speech and annotate the entry
-        with the POS.
-        :param contents: dict {'hw': {'content': text, 'id': 'A.1', 'marked_content_haw': text}
-        :return: list ['noun', 'verb', 'etc']
+        Parse an entry and return all Parts-of-speech.
+        :param contents: list
+        :return: list ['noun', 'verb', ...]
         """
         if contents is None:
             return None
         return sorted([pos for item in contents for pos in self.get_pos(item)])
 
-    def build_defs(self, e: dict) -> dict:
+    def get_def(self, s: str) -> str:
         """
-        Parse an entry and return all definitions added as a sub-dict.
-        :param e: dict {'hw': {'content': text, 'id': 'A.1', 'marked_content_haw': text}
+        Parse a contents string and extract the definition text.
+        :param s: an element of contents in source_dict
         :return: 
         """
-        if e is None:
-            return None, None
+        if s is None:
+            return None
+        try:
+            parts = re.split(self.CONTENT_POS, s)
+        except TypeError:
+            raise TypeError(f'Type error on splitting {s}')
+        # got a good string after splitting on pos
+        if len(parts) > 1 and parts[1] != '':
+            return parts[1].strip()
+        # if still two parts, then there was only a pos in the line...
+        elif len(parts) > 1:
+            return None
+        # otherwise, there was text with no pos
+        else:
+            # assume that line begins with a digit and .
+            return parts[0].split('.', 1)[1].strip()
+
+    def build_defs(self, contents: list) -> dict:
+        """
+        Parse an entry and return all definitions added as a sub-dict.
+        :param contents: list
+        :return: dict {'defs': {'1': 'text here', ...}
+        """
+        if contents is None or len(contents) == 0:
+            return None
+        def_dict = {}
+        # if len(contents) == 1:
+        #     def_dict['defs'] = {'1': self.get_def(contents[0])}
+        def_count = 0
+        for i, _ in enumerate(contents):
+            s = self.get_def(contents[i])
+            if s is not None:
+                def_count += 1
+                def_dict[str(def_count)] = s
+        return def_dict
 
     def build_parts(self, e: dict) -> dict:
         """
@@ -175,7 +208,7 @@ class Processor(object):
             return None, None
         (hw, payload), = e.items()
         payload['pos'] = self.build_pos(payload['content'])
-        # payload['defs'] = self.build_defs(payload['content'])
+        payload['defs'] = self.build_defs(payload['content'])
         return hw, payload
 
     def prepare_source(self):
