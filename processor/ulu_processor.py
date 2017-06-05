@@ -8,6 +8,7 @@
 # standard libs
 import os
 import copy
+import re
 from collections import Counter
 import pickle
 
@@ -26,6 +27,9 @@ class Processor(object):
     ULUDICTSRCPATH = '../ulu-dict/'
     ULUDICTSRCFILES = 'puk-1.html'
     TMPPATH = '../tmp/'
+
+    # Regex patterns compiled here for speed
+    CONTENT_POS = re.compile(r'^(?:\d+\.\s)?[a-z/A-Z]+\.')
 
     def __init__(self, path=None, names=None):
         """Constructor for Processor"""
@@ -116,8 +120,7 @@ class Processor(object):
                                             'marked_content_haw': marked_content_haw,
                                             'id': entry['id']}}
 
-    @staticmethod
-    def get_pos(s: str) -> str:
+    def get_pos(self, s: str) -> str:
         """
         Take a string and find the HAW_POS in that string and return.
         :param s: str with definition contents: 'n. Hatband.'
@@ -126,6 +129,11 @@ class Processor(object):
         if s is None:
             return None
         all_pos = []
+        try:
+            s = re.match(self.CONTENT_POS, s).group(0)
+        except AttributeError:
+            print(f'No part of speech for {s}')
+            return all_pos
         for pos, abbrevs in HAW_POS.items():
             for e in abbrevs:
                 if e in s and pos not in all_pos:
@@ -139,7 +147,7 @@ class Processor(object):
         """
         Parse an entry and get all Parts-of-speech and annotate the entry
         with the POS.
-        :param e: 
+        :param e: dict {'hw': {'content': text, 'id': 'A.1', 'marked_content_haw': text}
         :return: 
         """
         if e is None:
@@ -190,9 +198,9 @@ if __name__ == '__main__':
     ulu_proc = Processor()
     new_dic = ulu_proc.build_dict()
     pp = pprint.PrettyPrinter(indent=4)
-    pp.pprint(new_dic)
+    #pp.pprint(new_dic)
     haw_words = Counter(new_dic.keys())
-    pp.pprint(haw_words)
+    #pp.pprint(haw_words)
     print(f'Processed {sum((1 for w in haw_words.keys() if w is not None))} '
           f'total words in this run.')
 

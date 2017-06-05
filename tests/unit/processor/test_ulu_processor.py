@@ -106,20 +106,8 @@ class TestProcessor(object):
         # {'ʻāʻīʻoʻoleʻa': {'content': ['nvs. Stiff neck. Fig., disobedience, obstinacy; obstinate.'], 'id': 'A.514'}}
         assert self.p.build_pos({'ʻāʻīʻoʻoleʻa': {'content': ['nvs. Stiff neck. Fig., disobedience, obstinacy; obstinate.'], 'id': 'A.514'}}) == \
                ('ʻāʻīʻoʻoleʻa', {'content': ['nvs. Stiff neck. Fig., disobedience, obstinacy; obstinate.'], 'id': 'A.514', 'pos': ['noun', 'stative verb']})
-        # TODO this should be ['noun']
-        """    'ʻāpā': {   'content': [   'n.',
-                               '1. Roll or ream, as of paper; bolt, as of '
-                               'cloth.',
-                               '2. See lima ʻāpā.'],
-        """
-        # TODO this should not have tbd but is at least in part due to split lines
-        """
-            'ʻāwikiwiki': {   'content': [   '1. Redup. of ʻāwiki.',
-                                     '2. n.. A vine (Canavalia spp.), native '
-                                     'to Hawaiʻi, related to the maunaloa (C. '
-                                     'cathartica), but with narrower pods; '
-                                     'used for small, temporary fish traps. '
-                                     'Also puakauhi.',
-                                     '3. Same as kōʻeleʻele, a seaweed.'],
-        """
-
+        assert self.p.build_pos({'ʻāpā': {'content': ['n.', '1. Roll or ream, as of paper; bolt, as of cloth.',  '2. See lima ʻāpā.'],
+                                          'id': 'A.1370', 'pos': ['noun']}}) == \
+               ('ʻāpā', {'content': ['n.', '1. Roll or ream, as of paper; bolt, as of cloth.',  '2. See lima ʻāpā.'],
+                         'id': 'A.1370',
+                         'pos': ['noun']})
