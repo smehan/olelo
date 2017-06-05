@@ -17,7 +17,7 @@ from persistance.redis_db import RedisDB
 def r():
     """
     create a redis connection object for the test, then cleans up
-    after the tests are finished.
+    after the tests are finished.   
     :return: 
     """
     print("\nMaking a RedisDB instance")
@@ -88,4 +88,7 @@ class TestRedisDB(object):
         assert r._add_to_set('test_set',
                              '00942f4668670f34c5943cf52c7ef3139fe2b8d6',
                              None) == None
+
+    def test__all_set(self, r):
+        assert sorted(r._all_set('test_set:00942f4668670f34c5943cf52c7ef3139fe2b8d6')) == ['a', 'b', 'c']
 

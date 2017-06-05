@@ -33,10 +33,10 @@ class RedisDB(object):
         print("Closing connection to Redis DB....")
 
     def __str__(self):
-        pass
+        return f'A connection object to a Redis Instance'
 
     def __repr__(self):
-        pass
+        return f'< RedisDB() - {self.rdb} - {self.encoding} >'
 
     def encode_s(self, s: str) -> str:
         """
@@ -141,6 +141,16 @@ class RedisDB(object):
         set_name = self.encode_s(':'.join([name, hash_id]))
         rdb.sadd(set_name, *values)
         return set_name
+
+    def _all_set(self, name:str):
+        """
+        Given a valid set, return all the decoded members of the set as strings
+        with no set order.
+        :param name: 
+        :return: 
+        """
+        rdb = self.rdb
+        return [e.decode() for e in rdb.smembers(name)]
 
 
 
