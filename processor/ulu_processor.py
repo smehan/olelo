@@ -30,7 +30,7 @@ class Processor(object):
 
     # Regex patterns compiled here for speed
     CONTENT_POS = re.compile(r'^(?:\d+\.\s)?[a-z/A-Z]+\.')
-    CONTENT_DEF = re.compile(r'')
+    CONTENT_DEF = re.compile(r'^(?:\d+\.\s)?(.*)$')
 
     def __init__(self, path=None, names=None):
         """Constructor for Processor"""
@@ -157,6 +157,8 @@ class Processor(object):
     def get_def(self, s: str) -> str:
         """
         Parse a contents string and extract the definition text.
+        First splits on a match with pos regex.
+        If no match, then pulls the definition contents.
         :param s: an element of contents in source_dict
         :return: 
         """
@@ -165,7 +167,7 @@ class Processor(object):
         try:
             parts = re.split(self.CONTENT_POS, s)
         except TypeError:
-            raise TypeError(f'Type error on splitting {s}')
+            raise TypeError(f'Problem splitting on {s}')
         # got a good string after splitting on pos
         if len(parts) > 1 and parts[1] != '':
             return parts[1].strip()
@@ -173,9 +175,7 @@ class Processor(object):
         elif len(parts) > 1:
             return None
         # otherwise, there was text with no pos
-        else:
-            # assume that line begins with a digit and .
-            return parts[0].split('.', 1)[1].strip()
+        return re.match(self.CONTENT_DEF, s).group(1)
 
     def build_defs(self, contents: list) -> dict:
         """
@@ -186,8 +186,6 @@ class Processor(object):
         if contents is None or len(contents) == 0:
             return None
         def_dict = {}
-        # if len(contents) == 1:
-        #     def_dict['defs'] = {'1': self.get_def(contents[0])}
         def_count = 0
         for i, _ in enumerate(contents):
             s = self.get_def(contents[i])
@@ -253,7 +251,7 @@ if __name__ == '__main__':
     ulu_proc = Processor()
     new_dic = ulu_proc.build_dict()
     pp = pprint.PrettyPrinter(indent=4)
-    #pp.pprint(new_dic)
+    pp.pprint(new_dic)
     haw_words = Counter(new_dic.keys())
     #pp.pprint(haw_words)
     print(f'Processed {sum((1 for w in haw_words.keys() if w is not None))} '

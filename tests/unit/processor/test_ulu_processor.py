@@ -111,6 +111,7 @@ class TestProcessor(object):
         assert self.p.get_def('n. Hatband.') == 'Hatband.'
         assert self.p.get_def('1. Roll or ream, as of paper; bolt, as of cloth.') == \
                               'Roll or ream, as of paper; bolt, as of cloth.'
+        assert self.p.get_def('Short for aia lā.') == 'Short for aia lā.'
 
     def test_build_defs(self):
         assert self.p.build_defs(None) == None
@@ -120,6 +121,7 @@ class TestProcessor(object):
         assert self.p.build_defs(['n.', '1. Roll or ream, as of paper; bolt, as of cloth.',  '2. See lima ʻāpā.']) == \
                                 {'1': 'Roll or ream, as of paper; bolt, as of cloth.',
                                  '2': 'See lima ʻāpā.'}
+        assert self.p.build_defs(['Short for aia lā']) == {'1': 'Short for aia lā'}
 
     def test_build_parts(self):
         assert self.p.build_parts(None) == (None, None)
