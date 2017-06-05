@@ -143,17 +143,39 @@ class Processor(object):
             all_pos.append('tbd')
         return all_pos
 
-    def build_pos(self, e: dict) -> dict:
+    def build_pos(self, contents: dict) -> list:
         """
         Parse an entry and get all Parts-of-speech and annotate the entry
         with the POS.
+        :param contents: dict {'hw': {'content': text, 'id': 'A.1', 'marked_content_haw': text}
+        :return: list ['noun', 'verb', 'etc']
+        """
+        if contents is None:
+            return None
+        return sorted([pos for item in contents for pos in self.get_pos(item)])
+
+    def build_defs(self, e: dict) -> dict:
+        """
+        Parse an entry and return all definitions added as a sub-dict.
         :param e: dict {'hw': {'content': text, 'id': 'A.1', 'marked_content_haw': text}
         :return: 
         """
         if e is None:
             return None, None
+
+    def build_parts(self, e: dict) -> dict:
+        """
+        For each entry, build out components of parsed dictionary entry, 
+        including pos, definitions,
+        payload is a dict containing all components.
+        :param e: 
+        :return: 
+        """
+        if e is None:
+            return None, None
         (hw, payload), = e.items()
-        payload['pos'] = sorted([pos for item in payload['content'] for pos in self.get_pos(item)])
+        payload['pos'] = self.build_pos(payload['content'])
+        # payload['defs'] = self.build_defs(payload['content'])
         return hw, payload
 
     def prepare_source(self):
@@ -175,7 +197,7 @@ class Processor(object):
         """
         output = {}
         for entry in source_dict:
-            hw, rest = self.build_pos(entry)
+            hw, rest = self.build_parts(entry)
             output.update({hw: rest})
         return output
 

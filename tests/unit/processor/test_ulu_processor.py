@@ -95,19 +95,33 @@ class TestProcessor(object):
         assert self.p.get_pos(None) == None
 
     def test_build_pos(self):
-        assert self.p.build_pos(None) == (None, None)
+        assert self.p.build_pos(None) == None
         # {'apo pāpale': {'content': ['n. Hatband.'], 'id': 'A.1456'}}
-        assert self.p.build_pos({'apo pāpale': {'content': ['n. Hatband.'], 'id': 'A.1456'}}) == \
+        assert self.p.build_pos(['n. Hatband.']) == ['noun']
+        assert self.p.build_pos(['n. Hatband.']) != ['stative verb']
+        assert self.p.build_pos(['n. Hatband.']) != ['noun', 'stative verb']
+        # {'ʻāʻīʻoʻoleʻa': {'content': ['nvs. Stiff neck. Fig., disobedience, obstinacy; obstinate.'], 'id': 'A.514'}}
+        assert self.p.build_pos(['nvs. Stiff neck. Fig., disobedience, obstinacy; obstinate.']) == \
+                                ['noun', 'stative verb']
+        assert self.p.build_pos(['n.', '1. Roll or ream, as of paper; bolt, as of cloth.',  '2. See lima ʻāpā.']) == \
+                                ['noun']
+        # TODO Plural
+
+    def test_build_parts(self):
+        assert self.p.build_parts(None) == (None, None)
+        # {'apo pāpale': {'content': ['n. Hatband.'], 'id': 'A.1456'}}
+        assert self.p.build_parts({'apo pāpale': {'content': ['n. Hatband.'], 'id': 'A.1456'}}) == \
                ('apo pāpale', {'content': ['n. Hatband.'], 'id': 'A.1456', 'pos': ['noun']})
-        assert self.p.build_pos({'apo pāpale': {'content': ['n. Hatband.'], 'id': 'A.1456'}}) != \
+        assert self.p.build_parts({'apo pāpale': {'content': ['n. Hatband.'], 'id': 'A.1456'}}) != \
                ('apo pāpale', {'content': ['n. Hatband.'], 'id': 'A.1456', 'pos': ['stative verb']})
-        assert self.p.build_pos({'apo pāpale': {'content': ['n. Hatband.'], 'id': 'A.1456'}}) != \
+        assert self.p.build_parts({'apo pāpale': {'content': ['n. Hatband.'], 'id': 'A.1456'}}) != \
                ('apo pāpale', {'content': ['n. Hatband.'], 'id': 'A.1456', 'pos': ['noun', 'stative verb']})
         # {'ʻāʻīʻoʻoleʻa': {'content': ['nvs. Stiff neck. Fig., disobedience, obstinacy; obstinate.'], 'id': 'A.514'}}
-        assert self.p.build_pos({'ʻāʻīʻoʻoleʻa': {'content': ['nvs. Stiff neck. Fig., disobedience, obstinacy; obstinate.'], 'id': 'A.514'}}) == \
+        assert self.p.build_parts({'ʻāʻīʻoʻoleʻa': {'content': ['nvs. Stiff neck. Fig., disobedience, obstinacy; obstinate.'], 'id': 'A.514'}}) == \
                ('ʻāʻīʻoʻoleʻa', {'content': ['nvs. Stiff neck. Fig., disobedience, obstinacy; obstinate.'], 'id': 'A.514', 'pos': ['noun', 'stative verb']})
-        assert self.p.build_pos({'ʻāpā': {'content': ['n.', '1. Roll or ream, as of paper; bolt, as of cloth.',  '2. See lima ʻāpā.'],
+        assert self.p.build_parts({'ʻāpā': {'content': ['n.', '1. Roll or ream, as of paper; bolt, as of cloth.',  '2. See lima ʻāpā.'],
                                           'id': 'A.1370', 'pos': ['noun']}}) == \
                ('ʻāpā', {'content': ['n.', '1. Roll or ream, as of paper; bolt, as of cloth.',  '2. See lima ʻāpā.'],
                          'id': 'A.1370',
                          'pos': ['noun']})
+        # TODO Plural
