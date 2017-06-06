@@ -25,21 +25,19 @@ HAW_POS = {'noun': ['n.', 'nvi.', 'nvt.', 'nvs.'],
            'intransitive verb': ['vi.', 'nvi.'],
            'transitive verb': ['vt.', 'nvt.'],
            'stative verb': ['vs.', 'nvs.'],
-           'plural': ['Plural'],
-           'reduplication': ['Redup.'],
-           'passive/imperative': ['Pas/imp.'],
            'adjective': ['adj.'],
            'adverb': ['adverb'],
            'antonym': ['ant.'],
            'conjunction': ['conj.'],
+           'idiom': ['idiom.'],
            'figuratively': ['fig.'],
            'frequantive': ['freq.'],
            'imperative': ['imper.'],
-           'literally': ['Lit.'],
            'pronoun': ['pro.', 'pronoun'],
            'preposition': ['prep.'],
-           'perfect participle': ['perf.part.'],
-           'synonym': ['Syn']}
+           'perfect participle': ['perf.part.']}
+
+#TODO syns, Plural, Lit, Redup, Pas/imp. antonyms
 
 DIGITS = ['0123456789']
 

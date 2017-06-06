@@ -29,7 +29,7 @@ class Processor(object):
     TMPPATH = '../tmp/'
 
     # Regex patterns compiled here for speed
-    CONTENT_POS = re.compile(r'^(?:\d+\.\s)?[a-z/A-Z]+\.')
+    CONTENT_POS = re.compile(r'^(?:\d+\.\s)?[a-z.]+\.')
     CONTENT_DEF = re.compile(r'^(?:\d+\.\s)?(.*)$')
 
     def __init__(self, path=None, names=None):
@@ -121,7 +121,7 @@ class Processor(object):
                                             'marked_content_haw': marked_content_haw,
                                             'id': entry['id']}}
 
-    def get_pos(self, s: str) -> str:
+    def get_pos(self, s: str) -> list:
         """
         Take a string and find the HAW_POS in that string and return.
         :param s: str with definition contents: 'n. Hatband.'
@@ -139,9 +139,9 @@ class Processor(object):
             for e in abbrevs:
                 if e in s and pos not in all_pos:
                     all_pos.append(pos)
-        # if there is no result for pos, mark it tbd
+        # if there is no result for pos, mark it unknown
         if len(all_pos) == 0:
-            all_pos.append('tbd')
+            all_pos.append('UNKNOWN')
         return all_pos
 
     def build_pos(self, contents: list) -> list:
@@ -152,7 +152,7 @@ class Processor(object):
         """
         if contents is None:
             return None
-        return sorted([pos for item in contents for pos in self.get_pos(item)])
+        return sorted([pos for item in contents for pos in self.get_pos(item) if len(self.get_pos(item)) > 0])
 
     def get_def(self, s: str) -> str:
         """
@@ -171,11 +171,11 @@ class Processor(object):
         # got a good string after splitting on pos
         if len(parts) > 1 and parts[1] != '':
             return parts[1].strip()
-        # if still two parts, then there was only a pos in the line...
-        elif len(parts) > 1:
-            return None
-        # otherwise, there was text with no pos
-        return re.match(self.CONTENT_DEF, s).group(1)
+        # Now two cases. 1. There was a single word in line, e.g. '3. Croup'    .
+        if len(self.get_pos(s)) == 0:
+            return re.match(self.CONTENT_DEF, s).group(1)
+        # only a pos in the line
+        return None
 
     def build_defs(self, contents: list) -> dict:
         """

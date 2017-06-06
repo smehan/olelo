@@ -93,6 +93,8 @@ class TestProcessor(object):
 
     def test_get_pos(self):
         assert self.p.get_pos(None) == None
+        assert self.p.get_pos('n. Hatband.') == ['noun']
+        assert self.p.get_pos('3. Croup.') == []
 
     def test_build_pos(self):
         assert self.p.build_pos(None) == None
@@ -105,13 +107,16 @@ class TestProcessor(object):
                                 ['noun', 'stative verb']
         assert self.p.build_pos(['n.', '1. Roll or ream, as of paper; bolt, as of cloth.',  '2. See lima ʻāpā.']) == \
                                 ['noun']
-        # TODO Plural
+        # TODO A.12
 
     def test_get_def(self):
         assert self.p.get_def('n. Hatband.') == 'Hatband.'
         assert self.p.get_def('1. Roll or ream, as of paper; bolt, as of cloth.') == \
                               'Roll or ream, as of paper; bolt, as of cloth.'
         assert self.p.get_def('Short for aia lā.') == 'Short for aia lā.'
+        assert self.p.get_def('3. Croup.') == 'Croup.'
+
+        #TODO A.770
 
     def test_build_defs(self):
         assert self.p.build_defs(None) == None
@@ -122,6 +127,15 @@ class TestProcessor(object):
                                 {'1': 'Roll or ream, as of paper; bolt, as of cloth.',
                                  '2': 'See lima ʻāpā.'}
         assert self.p.build_defs(['Short for aia lā']) == {'1': 'Short for aia lā'}
+        assert self.p.build_defs(['1. n. High collar, stiff collar.',
+                                 '2. Spasmodic affection of the neck muscles ' \
+                                 'which draws the head toward the affected ' \
+                                 'side, a torticollis; stiff neck',
+                                 '3. Croup.']) == {'1': 'High collar, stiff collar.',
+                                 '2': 'Spasmodic affection of the neck muscles ' \
+                                 'which draws the head toward the affected ' \
+                                 'side, a torticollis; stiff neck',
+                                 '3': 'Croup.'}
 
     def test_build_parts(self):
         assert self.p.build_parts(None) == (None, None)
