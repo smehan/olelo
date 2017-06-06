@@ -152,7 +152,8 @@ class Processor(object):
         """
         if contents is None:
             return None
-        return sorted([pos for item in contents for pos in self.get_pos(item) if len(self.get_pos(item)) > 0])
+        all_lines = set([pos for item in contents for pos in self.get_pos(item) if len(self.get_pos(item)) > 0])
+        return sorted(list(all_lines))
 
     def get_def(self, s: str) -> str:
         """

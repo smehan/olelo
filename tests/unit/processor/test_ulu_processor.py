@@ -107,6 +107,19 @@ class TestProcessor(object):
                                 ['noun', 'stative verb']
         assert self.p.build_pos(['n.', '1. Roll or ream, as of paper; bolt, as of cloth.',  '2. See lima ʻāpā.']) == \
                                 ['noun']
+        assert self.p.build_pos(['1. nvs. Dumbness, inability to speak '
+                                 'intelligibly, a dumb person (Puk. 4.11); dumb, silent, still; to stutter and stammer, as a '
+                                 'dumb person. Poʻe kuli a ʻāʻā, deaf mutes. Ua ʻāʻā ka leo, the voice is '\
+                                 'unintelligible. He ʻāʻā kō ka hale, the people of the house are '
+                                 'silent. I lohe ʻia e nā ʻāʻā lololohe; i mau ʻāʻā lōlōkuli, it was heard from the '\
+                                 'dumb one who could hear, about those who were deaf and dumb.',
+                                 '2. nvs. Dwarf, small person; dwarfish, small. Kanaka poupou ʻāʻā, a short stout '\
+                                 'person. He ʻīlio ʻāʻā (KL. line 577), a short-legged dog.',
+                                 '3. vs. Demented, panic-stricken. See ʻaʻā maka, ʻaʻaia. Holo ʻāʻā, to run about in a '
+                                 'panic. hō.ʻā.ʻā To look about or search in confusion, stray, wander; disconcerted. E '
+                                 'hōʻāʻā ana i nā makaaniani, looking in confusion for the spectacles.',
+                                 '4. Probable var. of ʻā 4, booby bird.',
+                                 '5. n. Male ʻōʻō bird. (PPN ka(a)kaa.)']) == ['noun', 'stative verb']
         # TODO A.12
 
     def test_get_def(self):
