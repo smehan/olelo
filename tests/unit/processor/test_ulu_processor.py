@@ -83,7 +83,7 @@ class TestProcessor(object):
                                                                 '2. (Cap.) nvs. Abbreviation of ʻākau, north, as in surveying reports.'],
                                                     'marked_content_haw': ["1. prep. Of, acquired by. This <HAW>a</HAW> forms part of the possessives, as in <HAW>ka'u</HAW>, mine, and <HAW>kāna</HAW>, his. (Gram. 9.6.1.)<HAW>ʻUmi-a-Līloa</HAW>, <HAW>ʻUmi</HAW>, [son] of <HAW>Līloa</HAW>. <HAW>Hale-a-ka-lā</HAW>, house acquired [or used] by the sun [mountain name]. (PPN <HAW>ʻa</HAW>.)",
                                                                            '2. (Cap.) nvs. Abbreviation of <HAW>ʻākau</HAW>, north, as in surveying reports.'],
-                                                    'id': 'A.1'}}
+                                                    'id': ['A.1']}}
 
 
         #assert self.p.build_entry(r) == {'apo pāpale', {'content': ['n. Hatband.'], 'id': 'A.1456'}}
@@ -120,7 +120,6 @@ class TestProcessor(object):
                                  'hōʻāʻā ana i nā makaaniani, looking in confusion for the spectacles.',
                                  '4. Probable var. of ʻā 4, booby bird.',
                                  '5. n. Male ʻōʻō bird. (PPN ka(a)kaa.)']) == ['noun', 'stative verb']
-        # TODO A.12
 
     def test_get_def(self):
         assert self.p.get_def('n. Hatband.') == 'Hatband.'
@@ -169,3 +168,6 @@ class TestProcessor(object):
                          'pos': ['noun'],
                          'defs': {'1': 'Roll or ream, as of paper; bolt, as of cloth.',
                                   '2': 'See lima ʻāpā.'}})
+
+    def test_update_dict(self):
+        assert 0

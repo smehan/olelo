@@ -79,12 +79,22 @@ class Processor(object):
         rest = entry.split('\n')[1:]
         return hw, rest
 
+    def prepare_source(self):
+        """
+        Read in source html, parse the html and
+        build a generator for all entries in the source
+        :return: generator
+        """
+        page = self.get_src()
+        refs = self.get_dict_entries(page)
+        return (self.build_entry(r) for r in refs)
+
     @staticmethod
     def mark_haw(tag: Tag) -> str:
         """
         Takes a bs4 Tag object and returns a str with <HAW>words</HAW>
-        :param tag: 
-        :return: 
+        :param tag:
+        :return:
         """
         for e in tag.find_all('span'):
             if e.get('lang') is None:
@@ -99,13 +109,13 @@ class Processor(object):
         """
         Take a tag and build a representation of Cf. entries in the content.
         This will be of form 'Cf. haw_word; ...; haw_word.'
-        :return: 
+        :return:
         """
         pass
 
     def build_entry(self, entry: Tag) -> dict:
         """
-        Given a bs4 tag: entry, will parse entry and return a dict of the 
+        Given a bs4 tag: entry, will parse entry and return a dict of the
         head word and content, including ref id from processor.
         :param entry: bs4 tag object found in original source
         :return: dict: entry
@@ -119,19 +129,20 @@ class Processor(object):
             if head_word and content is not None:
                 return {head_word.strip(): {'content': content,
                                             'marked_content_haw': marked_content_haw,
-                                            'id': entry['id']}}
+                                            'id': [entry['id']]}}
 
     def get_pos(self, s: str) -> list:
         """
         Take a string and find the HAW_POS in that string and return.
         :param s: str with definition contents: 'n. Hatband.'
-        :return: 
+        :return:
         """
         if s is None:
             return None
         all_pos = []
         try:
             s = re.match(self.CONTENT_POS, s).group(0)
+            # TODO A.3 shows 'conj. and prep.'
         except AttributeError:
             print(f'No part of speech for {s}')
             return all_pos
@@ -161,7 +172,7 @@ class Processor(object):
         First splits on a match with pos regex.
         If no match, then pulls the definition contents.
         :param s: an element of contents in source_dict
-        :return: 
+        :return:
         """
         if s is None:
             return None
@@ -197,11 +208,11 @@ class Processor(object):
 
     def build_parts(self, e: dict) -> dict:
         """
-        For each entry, build out components of parsed dictionary entry, 
+        For each entry, build out components of parsed dictionary entry,
         including pos, definitions,
         payload is a dict containing all components.
-        :param e: 
-        :return: 
+        :param e:
+        :return:
         """
         if e is None:
             return None, None
@@ -210,28 +221,40 @@ class Processor(object):
         payload['defs'] = self.build_defs(payload['content'])
         return hw, payload
 
-    def prepare_source(self):
+    @staticmethod
+    def add_id():
+        pass
+
+    @staticmethod
+    def update_dict(d: dict, entry: tuple) -> dict:
         """
-        Read in source html, parse the html and 
-        build a generator for all entries in the source
-        :return: generator
+        Take an entry (hw, rest) and either add it as a new
+        key in the master dict or add info to existing entry
+        :param d:
+        :param entry:
+        :return:
         """
-        page = self.get_src()
-        refs = self.get_dict_entries(page)
-        return (self.build_entry(r) for r in refs)
+        hw = entry[0]
+        body = entry[1]
+        if hw in d:
+            print("Dupliccate entry")
+            #d[hw]['id'] = self.add_id(body['id'])
+        return {hw: body}
 
     def make_dict(self, source_dict: dict) -> dict:
         """
         Take the parsed entries from html source and 
         form a dict with appropriate attrs.
         :param source_dict: 
-        :return: 
+        :return: new_dict with all parts formed.
         """
-        output = {}
+        new_dict = {}
         for entry in source_dict:
             hw, rest = self.build_parts(entry)
-            output.update({hw: rest})
-        return output
+            if hw is None:
+                continue
+            new_dict.update(self.update_dict(new_dict, (hw, rest)))
+        return new_dict
 
     def build_dict(self) -> dict:
         """
@@ -241,9 +264,6 @@ class Processor(object):
         """
         words = self.prepare_source()
         new_words = self.make_dict(words)
-        # ensure that there are no Nones in the dict
-        while new_words.get('None'):
-            new_words.pop(None)
         with open(os.path.join(self.TMPPATH, 'new_words.pickle'), 'wb') as fh:
             pickle.dump(new_words, fh)
         return new_words
@@ -252,11 +272,28 @@ if __name__ == '__main__':
     ulu_proc = Processor()
     new_dic = ulu_proc.build_dict()
     pp = pprint.PrettyPrinter(indent=4)
-    pp.pprint(new_dic)
-    haw_words = Counter(new_dic.keys())
-    #pp.pprint(haw_words)
-    print(f'Processed {sum((1 for w in haw_words.keys() if w is not None))} '
+    #pp.pprint(new_dic)
+
+    # frequencies
+    haw_word_freqs = Counter(new_dic.keys())
+    #pp.pprint(haw_word_freqs)
+    print(f'Processed {sum((1 for w in haw_word_freqs.keys() if w is not None))} '
           f'total words in this run.')
+
+    # This checks the list of words processed and finds missing entries
+    id_list = []
+    for w in new_dic:
+        id_list.append(new_dic[w].get('id'))
+    delta = 1
+    for i, e in enumerate(id_list):
+        if (i+delta) != int(e.split('.')[1]):
+            print(i, e)
+            delta = int(e.split('.')[1]) - i
+
+    # that wasn't great, let's try to look at what is missing instead
+    for i in range(1, 1762):
+        if '.'.join(['A', str(i)]) not in id_list:
+            print(f"Whoa, no A.{i}!")
 
 
 
