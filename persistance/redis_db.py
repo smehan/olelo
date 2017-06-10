@@ -91,6 +91,11 @@ class RedisDB(object):
                     rdb.hset(hash_name,
                              self.encode_s(k),
                              self.encode_s(v))
+            if isinstance(arg, list):
+                for i, v in enumerate(arg):
+                    rdb.hset(hash_name,
+                             self.encode_s(str(i + 1)),
+                             self.encode_s(v))
         return hash_name
 
     def _all_keys_from_hash(self, name: str) -> list:
