@@ -66,7 +66,7 @@ class RedisLoader(RedisDB):
                 hw_id = self._v_from_hash(id_hash, hw)
                 _ = self._add_to_set('pos', hw_id, d[hw]['pos'])
                 _ = self._add_to_set('content', hw_id, d[hw]['content'])
-                _ = self._add_key_to_hash('defs', hw_id, d[hw]['defs'])
+                _ = self._add_keys_to_hash('defs', hw_id, d[hw]['defs'])
 
     def load_redis(self):
         haw_words = self._get_data()

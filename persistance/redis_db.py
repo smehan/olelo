@@ -67,11 +67,11 @@ class RedisDB(object):
         if key is None or key == '':
             return
         hash_entry = {key: hashlib.sha1(self.encode_s(key)).hexdigest()}
-        return self._add_key_to_hash(name,
+        return self._add_keys_to_hash(name,
                                      'id',
-                                     hash_entry)
+                                      hash_entry)
 
-    def _add_key_to_hash(self, name: str, id: str, *args: Sequence) -> str:
+    def _add_keys_to_hash(self, name: str, id: str, *args: Sequence) -> str:
         """
         For a hash given by name:id, adds k, v in args to said hash.
         :param name: str name of hash, e.g. 'defs'

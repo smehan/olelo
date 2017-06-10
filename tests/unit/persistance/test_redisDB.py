@@ -48,12 +48,12 @@ class TestRedisDB(object):
         assert r.decode_s(b'abc') == 'abc'
 
     def test__add_key_to_hash(self, r):
-        assert r._add_key_to_hash('test_seq_hash', '123', {'1': 'a', '2': 'b'}) == 'test_seq_hash:123'
+        assert r._add_keys_to_hash('test_seq_hash', '123', {'1': 'a', '2': 'b'}) == 'test_seq_hash:123'
         assert r.rdb.hgetall('test_seq_hash:123') == {b'1': b'a', b'2': b'b'}
         with pytest.raises(ValueError):
-            r._add_key_to_hash(None, None)
-        assert r._add_key_to_hash('test_hash', None) == None
-        assert r._add_key_to_hash('test_hash', 'test_key') == 'test_hash:test_key'
+            r._add_keys_to_hash(None, None)
+        assert r._add_keys_to_hash('test_hash', None) == None
+        assert r._add_keys_to_hash('test_hash', 'test_key') == 'test_hash:test_key'
 
     def test__all_keys_from_id_hash(self, r):
         h = make_test_id_hash(r)
