@@ -41,7 +41,7 @@ class RedisLoader(RedisDB):
         for k, v in d.items():
             if k is None:
                 continue
-            hw_ids = self._add_key_to_hash('haw', k)
+            hw_ids = self._add_key_to_id_hash('haw', k)
         return hw_ids
         # r = self.rdb
         # results = r.hgetall(hw_ids)
@@ -55,7 +55,7 @@ class RedisLoader(RedisDB):
         """
         Takes dictionary and adds parts for each entry
         :param d: dict from processed input
-        :param id_hash: This is the name of the id hash for hawaiian hw
+        :param id_hash: This is the hash of ids for hawaiian hw
         :return: 
         """
         all_ids = self._all_hash(id_hash).keys()
@@ -66,6 +66,7 @@ class RedisLoader(RedisDB):
                 hw_id = self._v_from_hash(id_hash, hw)
                 _ = self._add_to_set('pos', hw_id, d[hw]['pos'])
                 _ = self._add_to_set('content', hw_id, d[hw]['content'])
+                _ = self._add_key_to_hash('defs', hw_id, d[hw]['defs'])
 
     def load_redis(self):
         haw_words = self._get_data()

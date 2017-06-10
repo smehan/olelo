@@ -54,23 +54,43 @@ class RedisDB(object):
         """
         return s.decode()
 
-    def _add_key_to_hash(self, name: str, key: str) -> str:
+    def _add_key_to_id_hash(self, name: str, key: str) -> str:
         """
         Given an entry, encode all strings as utf-8 and set a sha1 id
-        in a redis hash with name
+        in a redis hash resulting with entries key:id.
+        This is a lookup hash for subsequent data, e.g.
+        hash name1:id1 name2:id2 ...
         :param name: name to give to the hash
+        :param key: key to add to hash
         :return: redis hash name
+        """
+        if key is None or key == '':
+            return
+        hash_entry = {key: hashlib.sha1(self.encode_s(key)).hexdigest()}
+        return self._add_key_to_hash(name,
+                                     'id',
+                                     hash_entry)
+
+    def _add_key_to_hash(self, name: str, id: str, *args: Sequence) -> str:
+        """
+        For a hash given by name:id, adds k, v in args to said hash.
+        :param name: str name of hash, e.g. 'defs'
+        :param id: str to use as second part of hash_name
+        :param args: sequence to iterate through and add as k, v in hash
+        :return: hash_name
         """
         rdb = self.rdb
         if name is None or name == '':
             raise ValueError("Redis hash needs a name....")
-        if key is None or key == '':
+        if id is None or id == '':
             return
-        encoded_key = self.encode_s(key)
-        hash_name = ':'.join([name, 'id'])
-        rdb.hset(hash_name,
-                 encoded_key,
-                 hashlib.sha1(encoded_key).hexdigest())
+        hash_name = ':'.join([name, id])
+        for arg in args:
+            if isinstance(arg, dict):
+                for k, v in arg.items():
+                    rdb.hset(hash_name,
+                             self.encode_s(k),
+                             self.encode_s(v))
         return hash_name
 
     def _all_keys_from_hash(self, name: str) -> list:
