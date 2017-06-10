@@ -71,25 +71,25 @@ class RedisDB(object):
                                      'id',
                                       hash_entry)
 
-    def _add_keys_to_hash(self, name: str, id: str, *args: T) -> str:
+    def _add_keys_to_hash(self, name: str, huid: str, *args: T) -> str:
         """
-        For a hash given by name:id, adds k, v in args to said hash.
+        For a hash given by name:huid, adds k, v in args to said hash.
         :param name: str name of hash, e.g. 'defs'
-        :param id: str to use as second part of hash_name
+        :param huid: str to use as second part of hash_name
         :param args: sequence or mapping to iterate through and add as k, v in hash
         :return: hash_name
         """
         rdb = self.rdb
         if name is None or name == '':
             raise ValueError("Redis hash needs a name....")
-        if id is None or id == '':
+        if huid is None or huid == '':
             return
-        hash_name = ':'.join([name, id])
+        hash_name = ':'.join([name, huid])
         for arg in args:
             if isinstance(arg, dict):
                 for k, v in arg.items():
                     rdb.hset(hash_name,
-                             self.encode_s(k),
+                             self.encode_s(str(k)),
                              self.encode_s(v))
             if isinstance(arg, list):
                 for i, v in enumerate(arg):

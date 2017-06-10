@@ -82,12 +82,12 @@ class Processor(object):
     def prepare_source(self):
         """
         Read in source html, parse the html and
-        build a generator for all entries in the source
+        return a generator for all entries in the source
         :return: generator
         """
         page = self.get_src()
         refs = self.get_dict_entries(page)
-        return (self.build_entry(r) for r in refs)
+        return (self.build_source_entry(r) for r in refs)
 
     @staticmethod
     def mark_haw(tag: Tag) -> str:
@@ -113,23 +113,23 @@ class Processor(object):
         """
         pass
 
-    def build_entry(self, entry: Tag) -> dict:
+    def build_source_entry(self, tag: Tag) -> dict:
         """
-        Given a bs4 tag: entry, will parse entry and return a dict of the
-        head word and content, including ref id from processor.
-        :param entry: bs4 tag object found in original source
+        Given a bs4 tag will parse tag and return a dict of the
+        head word and content, including ref id.
+        :param tag: bs4 tag object found in original source
         :return: dict: entry
         """
         # Firstly, we check to see if this is a word definition. Other cases not handled are
-        # letter definition or general text
-        if '.' in entry['id']:
-            head_word, content = self.parse_content(entry.text)
-            # need to pass a copy of entry to mark_haw to keep tag from being mutated
-            _, marked_content_haw = self.parse_content(self.mark_haw(copy.copy(entry)))
+        # letter section declaration or general text
+        if '.' in tag['id']:
+            head_word, content = self.parse_content(tag.text)
+            # need to pass a copy of tag to mark_haw to keep tag from being mutated
+            _, marked_content_haw = self.parse_content(self.mark_haw(copy.copy(tag)))
             if head_word and content is not None:
                 return {head_word.strip(): {'content': content,
                                             'marked_content_haw': marked_content_haw,
-                                            'id': [entry['id']]}}
+                                            'id': [tag['id']]}}
 
     def get_pos(self, s: str) -> list:
         """
@@ -189,62 +189,67 @@ class Processor(object):
         # only a pos in the line
         return None
 
-    def build_defs(self, contents: list) -> dict:
+    def build_defs(self, contents: list, existing_defs: dict = None) -> dict:
         """
         Parse an entry and return all definitions added as a sub-dict.
+        If there are existing defs, append the new defs.
         :param contents: list
+        :param existing_defs: dict of existing defs
         :return: dict {'defs': {'1': 'text here', ...}
         """
         if contents is None or len(contents) == 0:
             return None
-        def_dict = {}
-        def_count = 0
+        if existing_defs is not None:
+            def_dict = existing_defs
+        else:
+            def_dict = {}
+        def_count = len(def_dict)
         for i, _ in enumerate(contents):
             s = self.get_def(contents[i])
             if s is not None:
                 def_count += 1
-                def_dict[str(def_count)] = s
+                def_dict[def_count] = s
         return def_dict
 
-    def build_parts(self, e: dict) -> dict:
+    def build_parts(self, entry: dict) -> dict:
         """
-        For each entry, build out components of parsed dictionary entry,
+        For each source entry, build out components of parsed dictionary entry,
         including pos, definitions,
-        payload is a dict containing all components.
-        :param e:
-        :return:
-        """
-        if e is None:
-            return None, None
-        (hw, payload), = e.items()
-        payload['pos'] = self.build_pos(payload['content'])
-        payload['defs'] = self.build_defs(payload['content'])
-        return hw, payload
-
-    @staticmethod
-    def add_id():
-        pass
-
-    @staticmethod
-    def update_dict(d: dict, entry: tuple) -> dict:
-        """
-        Take an entry (hw, rest) and either add it as a new
-        key in the master dict or add info to existing entry
-        :param d:
+        body is a dict containing all components.
         :param entry:
-        :return:
+        :return: tuple (hw, body)
         """
-        hw = entry[0]
-        body = entry[1]
+        if entry is None:
+            return None, None
+        (hw, body), = entry.items()
+        body['pos'] = self.build_pos(body['content'])
+        body['defs'] = self.build_defs(body['content'])
+        return hw, body
+
+    def make_entry(self, d: dict, entry: tuple) -> dict:
+        """
+        Take an entry (hw, body) and either return it as a new
+        key in the master dict or return as an existing entry
+        with an updated body
+        :param d: master dict
+        :param entry: tuple (hw, entry_body)
+        :return: {hw: body}
+        """
+        hw, body = entry[0], entry[1]
         if hw in d:
-            print("Dupliccate entry")
-            #d[hw]['id'] = self.add_id(body['id'])
+            d[hw]['id'].extend(body['id'])
+            d[hw]['content'].extend(body['content'])
+            #d[hw]['marked_content_haw'].extend(body['marked_content_haw'])
+            d[hw]['defs'].update(self.build_defs(body['content'], d[hw]['defs']))
+            d[hw]['pos'] = list(set(d[hw]['pos'] + body['pos']))
+            return {hw: d[hw]}
+
         return {hw: body}
 
     def make_dict(self, source_dict: dict) -> dict:
         """
         Take the parsed entries from html source and 
-        form a dict with appropriate attrs.
+        form a master dict with appropriate attrs.
         :param source_dict: 
         :return: new_dict with all parts formed.
         """
@@ -253,7 +258,7 @@ class Processor(object):
             hw, rest = self.build_parts(entry)
             if hw is None:
                 continue
-            new_dict.update(self.update_dict(new_dict, (hw, rest)))
+            new_dict.update(self.make_entry(new_dict, (hw, rest)))
         return new_dict
 
     def build_dict(self) -> dict:
@@ -278,19 +283,14 @@ if __name__ == '__main__':
     haw_word_freqs = Counter(new_dic.keys())
     #pp.pprint(haw_word_freqs)
     print(f'Processed {sum((1 for w in haw_word_freqs.keys() if w is not None))} '
-          f'total words in this run.')
+          f'total head words in this run.')
 
     # This checks the list of words processed and finds missing entries
     id_list = []
     for w in new_dic:
-        id_list.append(new_dic[w].get('id'))
-    delta = 1
-    for i, e in enumerate(id_list):
-        if (i+delta) != int(e.split('.')[1]):
-            print(i, e)
-            delta = int(e.split('.')[1]) - i
+        for e in new_dic[w].get('id'):
+            id_list.append(e)
 
-    # that wasn't great, let's try to look at what is missing instead
     for i in range(1, 1762):
         if '.'.join(['A', str(i)]) not in id_list:
             print(f"Whoa, no A.{i}!")

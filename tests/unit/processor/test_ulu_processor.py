@@ -24,6 +24,20 @@ def src_text():
     return SRC_TEXT
 
 
+@pytest.fixture(scope='class')
+def test_master_dict():
+    master = {}
+    master['apo pāpale'] = {'content': ['n. Hatband.'],
+                            'id': ['A.1456'], 'pos': ['noun'],
+                            'defs': {1: 'Hatband.'}}
+    master['ʻāpā'] = {'content': ['n.', '1. Roll or ream, as of paper; bolt, as of cloth.', '2. See lima ʻāpā.'],
+                      'id': ['A.1370'],
+                       'pos': ['noun'],
+                       'defs': {1: 'Roll or ream, as of paper; bolt, as of cloth.',
+                                2: 'See lima ʻāpā.'}}
+    return master
+
+
 class TestProcessor(object):
 
     def setup_class(self):
@@ -51,7 +65,7 @@ class TestProcessor(object):
                ('a', ["1. prep. Of, acquired by. This a forms part of the possessives, as in ka'u, mine, and kāna, his. (Gram. 9.6.1.)ʻUmi-a-Līloa, ʻUmi, [son] of Līloa. Hale-a-ka-lā, house acquired [or used] by the sun [mountain name]. (PPN ʻa.)",
                '2. (Cap.) nvs. Abbreviation of ʻākau, north, as in surveying reports.'])
 
-    def test_build_entry(self):
+    def test_build_source_entry(self):
         """,
               ["1. prep. Of, acquired by. This <HAW>a</HAW> forms part of the possessives, as in <HAW>ka'u</HAW>, mine, and <HAW>kāna</HAW>, his. (Gram. 9.6.1.)<HAW>ʻUmi-a-Līloa</HAW>, <HAW>ʻUmi</HAW>, [son] of <HAW>Līloa</HAW>. <HAW>Hale-a-ka-lā</HAW>, house acquired [or used] by the sun [mountain name]. (PPN <HAW>ʻa</HAW>.)",
                '2. (Cap.) nvs. Abbreviation of <HAW>ʻākau</HAW>, north, as in surveying reports.']
@@ -65,18 +79,18 @@ class TestProcessor(object):
                    'id': 'A.1'}}
             """
             if r.get('id') == 'A.1':
-                print('testing new test')
+                print('testing A.1 test')
                 test_1 = r
-        assert self.p.build_entry(test_1) == {'a': {'content': ["1. prep. Of, acquired by. This a forms part of the possessives, as in ka'u, mine, and kāna, his. (Gram. 9.6.1.)ʻUmi-a-Līloa, ʻUmi, [son] of Līloa. Hale-a-ka-lā, house acquired [or used] by the sun [mountain name]. (PPN ʻa.)",
+        assert self.p.build_source_entry(test_1) == {'a': {'content': ["1. prep. Of, acquired by. This a forms part of the possessives, as in ka'u, mine, and kāna, his. (Gram. 9.6.1.)ʻUmi-a-Līloa, ʻUmi, [son] of Līloa. Hale-a-ka-lā, house acquired [or used] by the sun [mountain name]. (PPN ʻa.)",
                                                                 '2. (Cap.) nvs. Abbreviation of ʻākau, north, as in surveying reports.'],
                                                     'marked_content_haw': ["1. prep. Of, acquired by. This <HAW>a</HAW> forms part of the possessives, as in <HAW>ka'u</HAW>, mine, and <HAW>kāna</HAW>, his. (Gram. 9.6.1.)<HAW>ʻUmi-a-Līloa</HAW>, <HAW>ʻUmi</HAW>, [son] of <HAW>Līloa</HAW>. <HAW>Hale-a-ka-lā</HAW>, house acquired [or used] by the sun [mountain name]. (PPN <HAW>ʻa</HAW>.)",
                                                                            '2. (Cap.) nvs. Abbreviation of <HAW>ʻākau</HAW>, north, as in surveying reports.'],
-                                                    'id': ['A.1']}}
+                                                           'id': ['A.1']}}
 
 
-        #assert self.p.build_entry(r) == {'apo pāpale', {'content': ['n. Hatband.'], 'id': 'A.1456'}}
-        # words = (self.build_entry(r) for r in refs)
-        # assert self.p.build_entry({'apo pāpale': {'content': ['n. Hatband.'], 'id': 'A.1456'}}) == \
+        #assert self.p.build_source_entry(r) == {'apo pāpale', {'content': ['n. Hatband.'], 'id': 'A.1456'}}
+        # words = (self.build_source_entry(r) for r in refs)
+        # assert self.p.build_source_entry({'apo pāpale': {'content': ['n. Hatband.'], 'id': 'A.1456'}}) == \
         #        ('apo pāpale', {'content': ['n. Hatband.'], 'id': 'A.1456', 'pos': ['noun']})
 
     def test_get_pos(self):
@@ -120,42 +134,59 @@ class TestProcessor(object):
 
     def test_build_defs(self):
         assert self.p.build_defs(None) == None
-        assert self.p.build_defs(['n. Hatband.']) == {'1': 'Hatband.'}
+        assert self.p.build_defs(['n. Hatband.']) == {1: 'Hatband.'}
         assert self.p.build_defs(['nvs. Stiff neck. Fig., disobedience, obstinacy; obstinate.']) == \
-                                {'1': 'Stiff neck. Fig., disobedience, obstinacy; obstinate.'}
+                                {1: 'Stiff neck. Fig., disobedience, obstinacy; obstinate.'}
         assert self.p.build_defs(['n.', '1. Roll or ream, as of paper; bolt, as of cloth.',  '2. See lima ʻāpā.']) == \
-                                {'1': 'Roll or ream, as of paper; bolt, as of cloth.',
-                                 '2': 'See lima ʻāpā.'}
-        assert self.p.build_defs(['Short for aia lā']) == {'1': 'Short for aia lā'}
+                                {1: 'Roll or ream, as of paper; bolt, as of cloth.',
+                                 2: 'See lima ʻāpā.'}
+        assert self.p.build_defs(['Short for aia lā']) == {1: 'Short for aia lā'}
         assert self.p.build_defs(['1. n. High collar, stiff collar.',
                                  '2. Spasmodic affection of the neck muscles ' \
                                  'which draws the head toward the affected ' \
                                  'side, a torticollis; stiff neck',
-                                 '3. Croup.']) == {'1': 'High collar, stiff collar.',
-                                 '2': 'Spasmodic affection of the neck muscles ' \
+                                 '3. Croup.']) == {1: 'High collar, stiff collar.',
+                                 2: 'Spasmodic affection of the neck muscles ' \
                                  'which draws the head toward the affected ' \
                                  'side, a torticollis; stiff neck',
-                                 '3': 'Croup.'}
+                                 3: 'Croup.'}
+
+    def test_update_dict(self):
+        existing = self.p.build_defs(['n. Hatband.'])
+        assert self.p.build_defs(['n. Hatband.'], existing_defs=existing) == {1: 'Hatband.',
+                                                                              2: 'Hatband.'}
 
     def test_build_parts(self):
         assert self.p.build_parts(None) == (None, None)
         # {'apo pāpale': {'content': ['n. Hatband.'], 'id': 'A.1456'}}
-        assert self.p.build_parts({'apo pāpale': {'content': ['n. Hatband.'], 'id': 'A.1456'}}) == \
+        assert self.p.build_parts({'apo pāpale': {'content': ['n. Hatband.'], 'id': ['A.1456']}}) == \
                ('apo pāpale', {'content': ['n. Hatband.'],
-                               'id': 'A.1456', 'pos': ['noun'],
-                               'defs': {'1': 'Hatband.'}})
+                               'id': ['A.1456'], 'pos': ['noun'],
+                               'defs': {1: 'Hatband.'}})
         # {'ʻāʻīʻoʻoleʻa': {'content': ['nvs. Stiff neck. Fig., disobedience, obstinacy; obstinate.'], 'id': 'A.514'}}
-        assert self.p.build_parts({'ʻāʻīʻoʻoleʻa': {'content': ['nvs. Stiff neck. Fig., disobedience, obstinacy; obstinate.'], 'id': 'A.514'}}) == \
+        assert self.p.build_parts({'ʻāʻīʻoʻoleʻa': {'content': ['nvs. Stiff neck. Fig., disobedience, obstinacy; obstinate.'], 'id': ['A.514']}}) == \
                ('ʻāʻīʻoʻoleʻa', {'content': ['nvs. Stiff neck. Fig., disobedience, obstinacy; obstinate.'],
-                                 'id': 'A.514', 'pos': ['noun', 'stative verb'],
-                                 'defs': {'1': 'Stiff neck. Fig., disobedience, obstinacy; obstinate.'}})
+                                 'id': ['A.514'], 'pos': ['noun', 'stative verb'],
+                                 'defs': {1: 'Stiff neck. Fig., disobedience, obstinacy; obstinate.'}})
         assert self.p.build_parts({'ʻāpā': {'content': ['n.', '1. Roll or ream, as of paper; bolt, as of cloth.',  '2. See lima ʻāpā.'],
-                                          'id': 'A.1370', 'pos': ['noun']}}) == \
+                                          'id': ['A.1370'], 'pos': ['noun']}}) == \
                ('ʻāpā', {'content': ['n.', '1. Roll or ream, as of paper; bolt, as of cloth.',  '2. See lima ʻāpā.'],
-                         'id': 'A.1370',
+                         'id': ['A.1370'],
                          'pos': ['noun'],
-                         'defs': {'1': 'Roll or ream, as of paper; bolt, as of cloth.',
-                                  '2': 'See lima ʻāpā.'}})
+                         'defs': {1: 'Roll or ream, as of paper; bolt, as of cloth.',
+                                  2: 'See lima ʻāpā.'}})
 
-    def test_update_dict(self):
-        assert 0
+    def test_make_entry(self):
+        test_dict = test_master_dict()
+        test_entry = ('apo pāpale', {'content': ['n. Unicorn.'],
+                                     'id': ['A.0000'],
+                                     'pos': ['noun'],
+                                     'defs': {1: 'Unicorn.'}})
+        assert self.p.make_entry(test_dict, test_entry) == \
+               {'apo pāpale': {'content': ['n. Hatband.', 'n. Unicorn.'],
+                               'id': ['A.1456', 'A.0000'],
+                               'pos': ['noun'],
+                               'defs': {1: 'Hatband.', 2: 'Unicorn.'}}}
+
+
+

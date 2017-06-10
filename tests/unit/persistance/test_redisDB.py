@@ -26,7 +26,9 @@ def r():
     r.rdb.delete('test_hash:id',
                  'test_map_hash:123',
                  'test_seq_hash:234',
+                 'test_map_hash:345',
                  'test_set:00942f4668670f34c5943cf52c7ef3139fe2b8d6')
+    print("\nAll test redis objects removed.")
 
 
 @pytest.fixture(scope='function')
@@ -53,6 +55,8 @@ class TestRedisDB(object):
         assert r.rdb.hgetall('test_map_hash:123') == {b'1': b'a', b'2': b'b'}
         assert r._add_keys_to_hash('test_seq_hash', '234', ['a', 'b', 'c']) == 'test_seq_hash:234'
         assert r.rdb.hgetall('test_seq_hash:234') == {b'1': b'a', b'2': b'b', b'3': b'c'}
+        assert r._add_keys_to_hash('test_map_hash', '345', {1: 'a', 2: 'b'}) == 'test_map_hash:345'
+        assert r.rdb.hgetall('test_map_hash:345') == {b'1': b'a', b'2': b'b'}
         with pytest.raises(ValueError):
             r._add_keys_to_hash(None, None)
         assert r._add_keys_to_hash('test_hash', None) == None
