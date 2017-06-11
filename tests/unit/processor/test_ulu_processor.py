@@ -73,19 +73,20 @@ class TestProcessor(object):
         page = self.p.get_src()
         refs = self.p.get_dict_entries(page)
         for r in refs:
-            """
-            {'a': {'content': ["1. prep. Of, acquired by. This a forms part of the possessives, as in ka'u, mine, and kāna, his. (Gram. 9.6.1.)ʻUmi-a-Līloa, ʻUmi, [son] of Līloa. Hale-a-ka-lā, house acquired [or used] by the sun [mountain name]. (PPN ʻa.)", 
-                               '2. (Cap.) nvs. Abbreviation of ʻākau, north, as in surveying reports.'], 
-                   'id': 'A.1'}}
-            """
             if r.get('id') == 'A.1':
-                print('testing A.1 test')
                 test_1 = r
+            if r.get('id') == 'A.1762':
+                test_2 = r
         assert self.p.build_source_entry(test_1) == {'a': {'content': ["1. prep. Of, acquired by. This a forms part of the possessives, as in ka'u, mine, and kāna, his. (Gram. 9.6.1.)ʻUmi-a-Līloa, ʻUmi, [son] of Līloa. Hale-a-ka-lā, house acquired [or used] by the sun [mountain name]. (PPN ʻa.)",
-                                                                '2. (Cap.) nvs. Abbreviation of ʻākau, north, as in surveying reports.'],
-                                                    'marked_content_haw': ["1. prep. Of, acquired by. This <HAW>a</HAW> forms part of the possessives, as in <HAW>ka'u</HAW>, mine, and <HAW>kāna</HAW>, his. (Gram. 9.6.1.)<HAW>ʻUmi-a-Līloa</HAW>, <HAW>ʻUmi</HAW>, [son] of <HAW>Līloa</HAW>. <HAW>Hale-a-ka-lā</HAW>, house acquired [or used] by the sun [mountain name]. (PPN <HAW>ʻa</HAW>.)",
-                                                                           '2. (Cap.) nvs. Abbreviation of <HAW>ʻākau</HAW>, north, as in surveying reports.'],
+                                                                       '2. (Cap.) nvs. Abbreviation of ʻākau, north, as in surveying reports.'],
+                                                           'hw_stress': 'a',
+                                                           'marked_content_haw': ["1. prep. Of, acquired by. This <HAW>a</HAW> forms part of the possessives, as in <HAW>ka'u</HAW>, mine, and <HAW>kāna</HAW>, his. (Gram. 9.6.1.)<HAW>ʻUmi-a-Līloa</HAW>, <HAW>ʻUmi</HAW>, [son] of <HAW>Līloa</HAW>. <HAW>Hale-a-ka-lā</HAW>, house acquired [or used] by the sun [mountain name]. (PPN <HAW>ʻa</HAW>.)",
+                                                                                  '2. (Cap.) nvs. Abbreviation of <HAW>ʻākau</HAW>, north, as in surveying reports.'],
                                                            'id': ['A.1']}}
+        assert self.p.build_source_entry(test_2) == {'ʻāwīwī': {'content': ['vi. To hurry; speedy, swift, quick, fast.'],
+                                                                'hw_stress': 'ʻā.wī.wī',
+                                                                'marked_content_haw': ['vi. To hurry; speedy, swift, quick, fast.'],
+                                                                'id': ['A.1762']}}
 
 
         #assert self.p.build_source_entry(r) == {'apo pāpale', {'content': ['n. Hatband.'], 'id': 'A.1456'}}

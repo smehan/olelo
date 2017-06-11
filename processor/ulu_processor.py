@@ -75,7 +75,7 @@ class Processor(object):
             return None, None
         entry = entry.strip()
         # TODO there are language tags in the original html, including HAW and LAT, that prolly should be leveraged
-        hw = entry.split('\n')[0].replace('.', '').rstrip(' ')
+        hw = entry.split('\n')[0].rstrip()
         rest = entry.split('\n')[1:]
         return hw, rest
 
@@ -126,10 +126,13 @@ class Processor(object):
             head_word, content = self.parse_content(tag.text)
             # need to pass a copy of tag to mark_haw to keep tag from being mutated
             _, marked_content_haw = self.parse_content(self.mark_haw(copy.copy(tag)))
+            if '.' in head_word:
+                print(head_word)
             if head_word and content is not None:
-                return {head_word.strip(): {'content': content,
-                                            'marked_content_haw': marked_content_haw,
-                                            'id': [tag['id']]}}
+                return {head_word.replace('.', '').strip(): {'content': content,
+                                                             'marked_content_haw': marked_content_haw,
+                                                             'hw_stress': head_word.strip(),
+                                                             'id': [tag['id']]}}
 
     def get_pos(self, s: str) -> list:
         """
@@ -267,8 +270,8 @@ class Processor(object):
         Includes a serialized object on disk.
         :return: 
         """
-        words = self.prepare_source()
-        new_words = self.make_dict(words)
+        source_words = self.prepare_source()
+        new_words = self.make_dict(source_words)
         with open(os.path.join(self.TMPPATH, 'new_words.pickle'), 'wb') as fh:
             pickle.dump(new_words, fh)
         return new_words

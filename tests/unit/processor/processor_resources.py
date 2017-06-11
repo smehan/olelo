@@ -35,6 +35,10 @@ a, body, div, span, td {font-family:Lucida Sans Unicode,Arial Unicode MS,Lucida 
 <span lang="HAW">ʻaʻa.ahi </span>
 <p><span>n.</span> Bag for carrying fire-making equipment (<span lang="HAW">ʻaʻa</span>, <span lang="ENG">bag</span>, and <span lang="HAW">ahi</span>, <span lang="ENG">fire</span>).</p>
 </div>
+<div id="A.1762">
+<span lang="HAW">&#699;&#257;.w&#299;.w&#299; </span>
+<p><span>vi.</span> To hurry; speedy, swift, quick, fast.</p>
+</div>
 </div>
 </body>
 </html>
@@ -69,6 +73,10 @@ Pas/imp. suffix. (Gram. 6.6.3.) (PPN -a.)
 
 ʻaʻa.ahi 
 n. Bag for carrying fire-making equipment (ʻaʻa, bag, and ahi, fire).
+
+
+ʻā.wī.wī 
+vi. To hurry; speedy, swift, quick, fast.
 
 
 
