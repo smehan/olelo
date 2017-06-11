@@ -7,6 +7,7 @@
 
 # standard libs
 import os
+import glob
 import copy
 import re
 from collections import Counter
@@ -25,7 +26,7 @@ class Processor(object):
     This class reads in the html source of the dict and transforms it into usable string: encoded data.
     """
     ULUDICTSRCPATH = '../ulu-dict/'
-    ULUDICTSRCFILES = 'puk-1.html'
+    ULUDICTSRCFILES = 'puk-*.html'
     TMPPATH = '../tmp/'
 
     # Regex patterns compiled here for speed
@@ -44,8 +45,15 @@ class Processor(object):
         elif names:
             self.fname = names
 
-    def get_src(self) -> BeautifulSoup:
-        with open(os.path.join(self.srcpath, self.fname), 'r') as f:
+    def get_src(self, fn=None) -> BeautifulSoup:
+        """
+        Will read in an html document and return a bs4 object.
+        :param fn:
+        :return:
+        """
+        if fn is None:
+            fn = os.path.join(self.srcpath, self.fname)
+        with open(fn, 'r') as f:
             return BeautifulSoup(f.read(), 'html.parser')
 
     @staticmethod
@@ -79,13 +87,14 @@ class Processor(object):
         rest = entry.split('\n')[1:]
         return hw, rest
 
-    def prepare_source(self):
+    def prepare_source(self, fn=None):
         """
         Read in source html, parse the html and
         return a generator for all entries in the source
+        :param fn: str containg the basename of file to read
         :return: generator
         """
-        page = self.get_src()
+        page = self.get_src(fn)
         refs = self.get_dict_entries(page)
         return (self.build_source_entry(r) for r in refs)
 
@@ -126,8 +135,6 @@ class Processor(object):
             head_word, content = self.parse_content(tag.text)
             # need to pass a copy of tag to mark_haw to keep tag from being mutated
             _, marked_content_haw = self.parse_content(self.mark_haw(copy.copy(tag)))
-            if '.' in head_word:
-                print(head_word)
             if head_word and content is not None:
                 return {head_word.replace('.', '').strip(): {'content': content,
                                                              'marked_content_haw': marked_content_haw,
@@ -147,7 +154,6 @@ class Processor(object):
             s = re.match(self.CONTENT_POS, s).group(0)
             # TODO A.3 shows 'conj. and prep.'
         except AttributeError:
-            print(f'No part of speech for {s}')
             return all_pos
         for pos, abbrevs in HAW_POS.items():
             for e in abbrevs:
@@ -270,8 +276,11 @@ class Processor(object):
         Includes a serialized object on disk.
         :return: 
         """
-        source_words = self.prepare_source()
-        new_words = self.make_dict(source_words)
+        new_words = {}
+        for name in glob.glob(os.path.join(self.srcpath, self.fname)):
+            print(name)
+            source_words = self.prepare_source(fn=name)
+            new_words.update(self.make_dict(source_words))
         with open(os.path.join(self.TMPPATH, 'new_words.pickle'), 'wb') as fh:
             pickle.dump(new_words, fh)
         return new_words

@@ -88,12 +88,6 @@ class TestProcessor(object):
                                                                 'marked_content_haw': ['vi. To hurry; speedy, swift, quick, fast.'],
                                                                 'id': ['A.1762']}}
 
-
-        #assert self.p.build_source_entry(r) == {'apo pāpale', {'content': ['n. Hatband.'], 'id': 'A.1456'}}
-        # words = (self.build_source_entry(r) for r in refs)
-        # assert self.p.build_source_entry({'apo pāpale': {'content': ['n. Hatband.'], 'id': 'A.1456'}}) == \
-        #        ('apo pāpale', {'content': ['n. Hatband.'], 'id': 'A.1456', 'pos': ['noun']})
-
     def test_get_pos(self):
         assert self.p.get_pos(None) == None
         assert self.p.get_pos('n. Hatband.') == ['noun']
