@@ -56,8 +56,8 @@ HAW_POS = {'a-class possessive': ['a-poss.'],
 
 # TODO syns, Plural, Lit, antonyms
 
-DIGITS = ['0123456789']
-HAW_ALPHABET = ['aāeēhiīklmnoōpuūwʻ']
+DIGITS = '0123456789'
+HAW_ALPHABET = 'aāeēhiīklmnoōpuūwʻ'
 
 
 if __name__ == '__main__':
