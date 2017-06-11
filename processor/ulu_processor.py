@@ -289,13 +289,13 @@ if __name__ == '__main__':
     ulu_proc = Processor()
     new_dic = ulu_proc.build_dict()
     pp = pprint.PrettyPrinter(indent=4)
-    #pp.pprint(new_dic)
+    pp.pprint(new_dic)
 
     # frequencies
     haw_word_freqs = Counter(new_dic.keys())
     #pp.pprint(haw_word_freqs)
-    print(f'Processed {sum((1 for w in haw_word_freqs.keys() if w is not None))} '
-          f'total head words in this run.')
+    #print(f'Processed {sum((1 for w in haw_word_freqs.keys() if w is not None))} '
+    #      f'total head words in this run.')
 
     # This checks the list of words processed and finds missing entries
     id_list = []

@@ -93,6 +93,18 @@ class TestProcessor(object):
         assert self.p.get_pos('n. Hatband.') == ['noun']
         assert self.p.get_pos('3. Croup.') == []
 
+        #TODO A.277
+        """
+        'ahia' : {'content': ['1. Same as ʻāhiahia.', 
+                              '2. inter. How many.'], 
+        """
+        #TODO U.7
+        """
+        'ʻū': {   'content': [   '1. vi. interj. To grunt, groan, moan, sigh, hum, '
+                             'coo, mourn, grieve, complain. ]}
+                             ['intransitive verb', 'noun', 'stative verb', 'interjection']
+        """
+
     def test_build_pos(self):
         assert self.p.build_pos(None) == None
         # {'apo pāpale': {'content': ['n. Hatband.'], 'id': 'A.1456'}}

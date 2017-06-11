@@ -54,7 +54,7 @@ HAW_POS = {'a-class possessive': ['a-poss.'],
            'transitivizer': ['transitivizer'],
            'verb': ['v.', 'vt.', 'vi.', 'vs.', 'nvi.', 'nvs.', 'nvt.', 'nv.']}
 
-#TODO syns, Plural, Lit, Redup, Pas/imp. antonyms
+# TODO syns, Plural, Lit, antonyms
 
 DIGITS = ['0123456789']
 HAW_ALPHABET = ['aāeēhiīklmnoōpuūwʻ']

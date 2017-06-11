@@ -47,4 +47,4 @@ class RedisSearch(RedisDB):
 
 if __name__ == '__main__':
     haw_searcher = RedisSearch()
-    haw_searcher.find_hw('69a688ce2b07fa6796ba1579530dfffa401b80a6')
+    haw_searcher.find_hw('e2323d46da844920ba5d2e6da1d72b0fc76f09d8')
