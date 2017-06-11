@@ -17,7 +17,7 @@
 # Not certain how to match compound symbol to multiple entries, e.g.
 # nvi. 1. a thing; to be a thing....
 
-__all__ = ['HAW_POS']
+__all__ = ['HAW_POS', 'DIGITS', 'HAW_ALPHABET']
 
 HAW_POS = {'a-class possessive': ['a-poss.'],
            'adverb': ['adverb'],
@@ -53,6 +53,10 @@ HAW_POS = {'a-class possessive': ['a-poss.'],
            'transitive verb': ['vt.', 'nvt.'],
            'transitivizer': ['transitivizer'],
            'verb': ['v.', 'vt.', 'vi.', 'vs.', 'nvi.', 'nvs.', 'nvt.', 'nv.']}
+
+""" These should be normalizations to modern Hawaiian that reflect beginning consonant changes k -> v"""
+HAW_SPELLING_NORMALIZATIONS = {'b': 'p',
+                               'd': 'k'}
 
 # TODO syns, Plural, Lit, antonyms
 
