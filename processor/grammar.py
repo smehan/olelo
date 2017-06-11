@@ -19,27 +19,45 @@
 
 __all__ = ['HAW_POS']
 
-HAW_POS = {'noun': ['n.', 'nvi.', 'nvt.', 'nvs.'],
-           'interjection': ['interj.'],
-           'verb': ['v.'],
-           'intransitive verb': ['vi.', 'nvi.'],
-           'transitive verb': ['vt.', 'nvt.'],
-           'stative verb': ['vs.', 'nvs.'],
-           'adjective': ['adj.'],
+HAW_POS = {'a-class possessive': ['a-poss.'],
            'adverb': ['adverb'],
+           'adjective': ['adj.'],
            'antonym': ['ant.'],
+           'article': ['art.'],
+           'causative/simulative': ['caus/sim.'],
            'conjunction': ['conj.'],
-           'idiom': ['idiom.'],
+           'demonstrative': ['demon.'],
+           'directional': ['dir'],
+           'exclusive': ['excl.'],
            'figuratively': ['fig.'],
            'frequantive': ['freq.'],
+           'idiom': ['idiom.'],
+           'inclusive': ['incl.'],
            'imperative': ['imper.'],
+           'interjection': ['interj.'],
+           'interrogative': ['interr.'],
+           'intransitive verb': ['vi.', 'nvi.'],
+           'locative noun': ['loc n.'],
+           'nominalizer': ['nom.'],
+           'noun-verb': ['nv.'],
+           'noun': ['n.', 'nvi.', 'nvt.', 'nvs.', 'loc n.', 'nv.'],
+           'o-class possessive': ['o-poss.'],
+           'particle': ['part.', 'particle', 'prep.'],
+           'passive/imperative': ['pas/imp.'],
+           'possessive': ['poss.', 'a-poss.', 'o-poss.'],
            'pronoun': ['pro.', 'pronoun'],
            'preposition': ['prep.'],
-           'perfect participle': ['perf.part.']}
+           'perfect participle': ['perf.part.'],
+           'reduplication': ['redup.'],
+           'stative verb': ['vs.', 'nvs.'],
+           'transitive verb': ['vt.', 'nvt.'],
+           'transitivizer': ['transitivizer'],
+           'verb': ['v.', 'vt.', 'vi.', 'vs.', 'nvi.', 'nvs.', 'nvt.', 'nv.']}
 
 #TODO syns, Plural, Lit, Redup, Pas/imp. antonyms
 
 DIGITS = ['0123456789']
+HAW_ALPHABET = ['aāeēhiīklmnoōpuūwʻ']
 
 
 if __name__ == '__main__':
