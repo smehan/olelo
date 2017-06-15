@@ -168,3 +168,4 @@ ENV/
 
 # Local files/dirs
 /tmp/
+/twitter/local.cfg # this should not be removed!
