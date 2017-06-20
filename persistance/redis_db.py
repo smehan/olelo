@@ -54,6 +54,15 @@ class RedisDB(object):
         """
         return s.decode()
 
+    def _get_random_key(self):
+        """
+        Get a random key from redis. If it isn't an id hash, return the id as a str.
+        :return: hash_id
+        """
+        rdb = self.rdb
+        result = self.decode_s(rdb.randomkey())
+        return result.split(':')[1]
+
     def _add_key_to_id_hash(self, name: str, key: str) -> str:
         """
         Given an entry, encode all strings as utf-8 and set a sha1 id

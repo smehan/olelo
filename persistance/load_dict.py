@@ -18,7 +18,7 @@ from grammar import HAW_POS
 
 class RedisLoader(RedisDB):
     """
-    Take processed 
+    Class to load pickled dictionary into a redis db.
     """
 
     def __init__(self):
