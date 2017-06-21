@@ -55,8 +55,6 @@ class Tweeter(RedisDB):
             if v == huid:
                 word_defs = self._all_values_from_hash(':'.join(['defs', huid]))
                 word_pos = self.rdb.smembers(':'.join(['pos', huid]))
-                print(f'HW - {k}, HUID - {v}')
-                print(f'Defs - {word_defs}')
                 print(f'POS - {word_pos}')
                 self.push_tweet(k, word_defs)
 
@@ -64,10 +62,10 @@ class Tweeter(RedisDB):
         api = self.API
         page = 0
         found_one = False
-        while found_one is False:
+        while not found_one:
             result = api.search_users('#hawaiian', page=page)
             for user in result:
-                if user.following is False and 'hawaii' in user.desciption.lower():
+                if user.following is False and 'hawaii' in user.description.lower():
                     print(f"friended {user.id}")
                     api.create_friendship(id=user.id)
                     found_one = True
