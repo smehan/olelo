@@ -42,7 +42,7 @@ class Tweeter(RedisDB):
 
     def push_tweet(self, hw, defs):
         api = self.API
-        tweet = f"#Hawaiian Word Of The Day: {hw} - {defs}"
+        tweet = f"#Hawaiian WOTD: {hw} - {defs}"
         if self.DEBUG:
             print(f'About to tweet: {tweet}')
         else:
