@@ -66,10 +66,13 @@ class Tweeter(RedisDB):
             result = api.search_users('#hawaiian', page=page)
             for user in result:
                 if user.following is False and 'hawaii' in user.description.lower():
-                    print(f"friended {user.id}")
-                    api.create_friendship(id=user.id)
-                    found_one = True
-                    break
+                    try:
+                        print(f"friended {user.id}")
+                        api.create_friendship(id=user.id)
+                        found_one = True
+                        break
+                    except tweepy.error.TweepError as e:
+                        print(e)
             page += 1
 
 
