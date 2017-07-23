@@ -32,6 +32,12 @@ def time_to_words(ts: str):
 
 
 def parse_time(s: str):
+    """
+    Extracts hour and minute values or computes those values for
+    now.
+    :param s: 24hr clock or "now"
+    :return: Tuple with (hour, minute) of time.
+    """
     try:
         m = re.match("(\d\d):(\d\d)|now", s)
     except AttributeError as e:

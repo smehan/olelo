@@ -34,3 +34,8 @@ class TestTimeToWords(object):
 
     def test_parse_time(self):
         assert parse_time("now") == parse_time(dt.datetime.now().strftime("%H:%M"))
+        assert parse_time("01:00") == ("01", "00")
+        assert parse_time("23:59") == ("23", "59")
+        with pytest.raises(AttributeError):
+            assert parse_time("1:15")
+            assert parse_time("1230")
