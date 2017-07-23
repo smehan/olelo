@@ -7,21 +7,41 @@
 
 # standard libs
 import os
-import datetime.datetime
+import datetime as dt
+import re
 
 # 3rd-party libs
 
 # application libs
 
-words_dict = {1: 'ekahi', 2: 'elua', 3: 'e', 4: '', 5: '',
-              6:'', 7:'', 8:'', 9:'', 10:'',
-              11:'', 12:'', 13:'', 14:'', 15:'',
-              16:'', 17:'', 18:'', 19:'', 20:'',
-              21:'', 22:'', 23:'', 24:'', 25:'',
-              26:'', 27:'', 28:'', 29:''}
+words_dict = {1: 'ʻekahi', 2: 'ʻelua', 3: 'ʻekolu', 4: 'ʻehā', 5: 'ʻelima',
+              6:'ʻeono', 7: "ʻehiku", 8: "ʻewalu", 9: "ʻeiwa", 10: "ʻumi",
+              11: "ʻumikūmākahi", 12: "ʻumikūmālua", 13: "ʻumikūmākolu", 14: "ʻumikūmāhā", 15: "ʻumikūmālima",
+              16: "ʻumikūmāono", 17: "ʻumikūmāhika", 18: "ʻumikūmāwalu", 19: "ʻumikūmāiwa",
+              20: "iwakālua", 21: "iwakālua-kūmā-kahi", 22: "iwakālua-kūmā-lua",
+              23: "iwakālua-kūmā-kolu", 24: "iwakālua-kūmā-hā", 25: "iwakālua-kūmā-lima",
+              26: "iwakālua-kūmā-ono", 27: "iwakālua-kūmā-hiku", 28: "iwakālua-kūmā-walu",
+              29: "iwakālua-kūmā-iwa"}
 
-def time_to_words():
-    pass
+
+def time_to_words(ts: str):
+    try:
+        return parse_time(ts)
+    except AttributeError as e:
+        raise ValueError(f"{ts} must be either a hh:mm time or now...")
+
+
+def parse_time(s: str):
+    try:
+        m = re.match("(\d\d):(\d\d)|now", s)
+    except AttributeError as e:
+        raise e
+    if m.group(2) is not None:
+        return m.group(1), m.group(2)
+    else:
+        now = dt.datetime.now().strftime("%H:%M")
+        return parse_time(now)
+
 
 def time_conversion(words_dict, hours, minutes, period):
     """Return time as words
