@@ -1,6 +1,7 @@
 ###########################################################
 # Copyright (C) 2017 Shawn Mehan <shawn dot mehan at shawnmehan dot com>
 # Converts a 24hr format time string into equivalent word statements in hawaiian.
+# "ʻO ka hola ʻehia kēia?"
 ###########################################################
 #
 #  -*- coding: utf-8 -*-
