@@ -113,7 +113,7 @@ class TestProcessor(object):
         assert self.p.build_pos(['n. Hatband.']) != ['noun', 'stative verb']
         # {'ʻāʻīʻoʻoleʻa': {'content': ['nvs. Stiff neck. Fig., disobedience, obstinacy; obstinate.'], 'id': 'A.514'}}
         assert self.p.build_pos(['nvs. Stiff neck. Fig., disobedience, obstinacy; obstinate.']) == \
-                                ['noun', 'stative verb']
+                                ['noun', 'stative verb', 'verb']
         assert self.p.build_pos(['n.', '1. Roll or ream, as of paper; bolt, as of cloth.',  '2. See lima ʻāpā.']) == \
                                 ['noun']
         assert self.p.build_pos(['1. nvs. Dumbness, inability to speak '
@@ -128,7 +128,7 @@ class TestProcessor(object):
                                  'panic. hō.ʻā.ʻā To look about or search in confusion, stray, wander; disconcerted. E '
                                  'hōʻāʻā ana i nā makaaniani, looking in confusion for the spectacles.',
                                  '4. Probable var. of ʻā 4, booby bird.',
-                                 '5. n. Male ʻōʻō bird. (PPN ka(a)kaa.)']) == ['noun', 'stative verb']
+                                 '5. n. Male ʻōʻō bird. (PPN ka(a)kaa.)']) == ['noun', 'stative verb', 'verb']
 
     def test_get_def(self):
         assert self.p.get_def('n. Hatband.') == 'Hatband.'
@@ -173,7 +173,7 @@ class TestProcessor(object):
         # {'ʻāʻīʻoʻoleʻa': {'content': ['nvs. Stiff neck. Fig., disobedience, obstinacy; obstinate.'], 'id': 'A.514'}}
         assert self.p.build_parts({'ʻāʻīʻoʻoleʻa': {'content': ['nvs. Stiff neck. Fig., disobedience, obstinacy; obstinate.'], 'id': ['A.514']}}) == \
                ('ʻāʻīʻoʻoleʻa', {'content': ['nvs. Stiff neck. Fig., disobedience, obstinacy; obstinate.'],
-                                 'id': ['A.514'], 'pos': ['noun', 'stative verb'],
+                                 'id': ['A.514'], 'pos': ['noun', 'stative verb', 'verb'],
                                  'defs': {1: 'Stiff neck. Fig., disobedience, obstinacy; obstinate.'}})
         assert self.p.build_parts({'ʻāpā': {'content': ['n.', '1. Roll or ream, as of paper; bolt, as of cloth.',  '2. See lima ʻāpā.'],
                                           'id': ['A.1370'], 'pos': ['noun']}}) == \
