@@ -1,6 +1,6 @@
 ###########################################################
 # Copyright (C) 2017 Shawn Mehan <shawn dot mehan at shawnmehan dot com>
-# Converts a 24hr formate time string into equivalent word statements in hawaiian.
+# Converts a 24hr format time string into equivalent word statements in hawaiian.
 ###########################################################
 #
 #  -*- coding: utf-8 -*-
@@ -61,8 +61,10 @@ def fmt_minutes(h: int, m: int):
 
 
 def fmt_hours(h: int):
+    if h < 3:
+        return f"{words_dict[h]}" + " kēia o ka ʻaumoe" # 23-03
     if h < 5:
-        return f"{words_dict[h]}" + " kēia o ka ʻaumoe" # 23-05
+        return f"{words_dict[h]}" + " kēia o ka pō" # 03-05
     elif h < 6:
         return f"{words_dict[h]}" + " kēia o ka wanaʻao" # 05 - 06
     elif h < 10:
@@ -76,7 +78,7 @@ def fmt_hours(h: int):
     elif h < 23:
         return f"{words_dict[h]}" + " kēia o ka pō" # 20 - 23
     else:
-        return f"{words_dict[h]}" + " kēia o ka ʻaumoe" # 23 - 05
+        return f"{words_dict[h]}" + " kēia o ka ʻaumoe" # 23 - 03
 
 
 def form_words(hh: int, mm: int):
