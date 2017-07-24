@@ -26,7 +26,7 @@ words_dict = {1: 'ʻekahi', 2: 'ʻelua', 3: 'ʻekolu', 4: 'ʻehā', 5: 'ʻelima'
 
 def time_to_words(ts: str):
     try:
-        return parse_time(ts)
+        return form_words(*parse_time(ts))
     except AttributeError as e:
         raise ValueError(f"{ts} must be either a hh:mm time or now...")
 
@@ -43,47 +43,42 @@ def parse_time(s: str):
     except AttributeError as e:
         raise e
     if m.group(2) is not None:
-        return m.group(1), m.group(2)
+        return int(m.group(1)), int(m.group(2))
     else:
         now = dt.datetime.now().strftime("%H:%M")
         return parse_time(now)
 
 
-def time_conversion(words_dict, hours, minutes, period):
-    """Return time as words
-    based on relevant condition"""
-    if hours == 12:
-        hours2 = words_dict.get(1)
+def fmt_minutes(h: int, m: int):
+    if m < 16:
+        words = ''
+    elif m < 46:
+        words = ''
     else:
-        hours2 = words_dict.get(hours+1)
-    if hours == 12 and minutes == 0 and period == 'before midday':
-        time_words = 'Midnight'
-    elif hours == 12 and minutes == 0 and period == 'after midday':
-        time_words = 'Midday'
-    elif minutes == 0:
-        time_words = "{0} o'clock {1}.".format(str(words_dict.get(hours)).title(),
-                                               period)
-    elif minutes == 15:
-        time_words = "Quarter past {0} {1}.".format(words_dict.get(hours),
-                                                    period)
-    elif minutes == 30:
-        time_words = "Half past {0} {1}.".format(words_dict.get(hours),
-                                                 period)
-    elif minutes == 45:
-        time_words = "Quarter to {0} {1}.".format(hours2,
-                                                  period)
-    elif minutes < 30:
-        min_str = words_dict.get(minutes).capitalize()
-        min_num = "" if minutes == 1 else "s"
-        time_words = "{0} minute{1} past {2} {3}.".format(min_str,
-                                                          min_num,
-                                                          words_dict.get(hours),
-                                                          period)
+        words = ''
+        h += 1
+    return h, words
+
+
+def fmt_hours(h: int):
+    if h < 5:
+        return f"{words_dict[h]}" + " kēia o ka ʻaumoe" # 23-05
+    elif h < 6:
+        return f"{words_dict[h]}" + " kēia o ka wanaʻao" # 05 - 06
+    elif h < 10:
+        return f"{words_dict[h]}" + " kēia o ke kakahiaka" # 06 - 10
+    elif h < 14:
+        return f"{words_dict[h]}" + " kēia o ke awakea" # 10 - 14
+    elif h < 17:
+        return f"{words_dict[h]}" + " kēia o ka ʻauinalā" # 14 - 17
+    elif h < 20:
+        return f"{words_dict[h]}" + " kēia o ke ahiahi" # 17 - 20
+    elif h < 23:
+        return f"{words_dict[h]}" + " kēia o ka pō" # 20 - 23
     else:
-        min_str = words_dict.get(60 - minutes).capitalize()
-        min_num = "" if 60 - minutes == 1 else "s"
-        time_words = '{0} minute{1} to {2} {3}.'.format(min_str,
-                                                        min_num,
-                                                        hours2,
-                                                        period)
-    return time_words
+        return f"{words_dict[h]}" + " kēia o ka ʻaumoe" # 23 - 05
+
+
+def form_words(hh: int, mm: int):
+    hh, minutes_part = fmt_minutes(hh, mm)
+    return f'ʻO ka {minutes_part} hola {fmt_hours(hh)}.'.replace('  ', ' ')
