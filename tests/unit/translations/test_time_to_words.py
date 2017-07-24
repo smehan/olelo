@@ -44,3 +44,5 @@ class TestTimeToWords(object):
 
     def test_form_words(self):
         assert form_words(12, 00) == "ʻO ka hola ʻumikūmālua kēia o ke awakea."
+        assert form_words(12, 16) == "ʻO ka hapalua hola ʻumikūmālua kēia o ke awakea."
+        assert form_words(12, 50) == "ʻO ka hola ʻumikūmākolu kēia o ke awakea."

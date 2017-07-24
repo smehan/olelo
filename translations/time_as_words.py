@@ -53,7 +53,7 @@ def fmt_minutes(h: int, m: int):
     if m < 16:
         words = ''
     elif m < 46:
-        words = ''
+        words = ' hapalua '
     else:
         words = ''
         h += 1
