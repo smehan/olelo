@@ -9,6 +9,7 @@
 # standard libs
 import os
 import datetime as dt
+import pytz
 import re
 
 # 3rd-party libs
@@ -46,7 +47,8 @@ def parse_time(s: str):
     if m.group(2) is not None:
         return int(m.group(1)), int(m.group(2))
     else:
-        now = dt.datetime.now().strftime("%H:%M")
+        hawaii_tz = pytz.timezone("US/Hawaii")
+        now = dt.datetime.now(tz=hawaii_tz).strftime("%H:%M")
         return parse_time(now)
 
 
