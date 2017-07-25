@@ -59,6 +59,30 @@ class StreamListener(tweepy.StreamListener):
                 return True
             return False
 
+    def build_time(self, name):
+        ts = taw.time_to_words("now")
+        return f"E @{name}, " + ts
+
+    def post_time_reply(self, status_id, body):
+        api = self.API
+        if self.DEBUG:
+            print(f"{status_id} gets the tweet: {body}")
+        else:
+            api.update_status(status=body,
+                              in_reply_to_status_id_str=status_id)
+
+    def build_link(self, screen_name, tweet_id):
+        return f"https://twitter.com/{screen_name}/status/{tweet_id}"
+
+    def post_time_retweet(self, reply_to, user):
+        api = self.API
+        body = f"{self.build_time(user._json['screen_name'])} {self.build_link(user._json['screen_name'], reply_to._json['id_str'])}"
+        if self.DEBUG:
+            print(body)
+        else:
+            api.update_status(status=body,
+                              in_reply_to_status_id_str=reply_to._json['id_str'])
+
     def check_tweets(self):
         api = self.API
         recent_tweets = api.mentions_timeline(count=100)
@@ -67,13 +91,11 @@ class StreamListener(tweepy.StreamListener):
                 continue
             self.last_reqs.appendleft(rt._json['id_str'])
             if self.asks_time(rt._json['text']):
-                print(rt._json['id_str'])
                 user = api.get_user(user_id=rt._json['user']['id'])
-                print(self.build_time(user._json['screen_name']))
-
-    def build_time(self, name):
-        ts = taw.time_to_words("now")
-        return f"E @{name}, " + ts
+                self.post_time_reply(status_id=rt._json['id_str'],
+                                     body=self.build_time(user._json['screen_name']))
+                self.post_time_retweet(reply_to=rt,
+                                       user=user)
 
     def speaking_clock(self):
         clock_is_on = True
@@ -83,7 +105,7 @@ class StreamListener(tweepy.StreamListener):
             time.sleep(250)
 
 if __name__ == '__main__':
-    t = StreamListener()
+    t = StreamListener(debug=False)
     t.speaking_clock()
     #stream_listener = StreamListener()
     stream = tweepy.Stream(auth=t.API.auth, listener=t)
