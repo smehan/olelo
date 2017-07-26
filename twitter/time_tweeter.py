@@ -18,39 +18,21 @@ import yaml
 
 # application libs
 from persistance.redis_db import RedisDB
+from twitter.tweeter import Tweeter
 import translations.time_as_words as taw
 
 
-class TweeterSpeakingClock(object):
+class TweeterSpeakingClock(Tweeter):
 
-    def __init__(self, debug=True):
-        super().__init__()
+    def __init__(self, debug=True, **kargs):
+        super().__init__(**kargs)
 
-        #init_logging()
-        #self.logger = logging.getLogger(__name__)
-        #self.logger.info("Job started and logging enabled")
-
-        with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "local.cfg"), "r") as fh:
-            cfg = yaml.load(fh)
-
-        self.screen_name = cfg['screen_name']
-        auth = tweepy.OAuthHandler(cfg['consumer_key'], cfg['consumer_secret'])
-        auth.set_access_token(cfg['access_token'], cfg['access_token_secret'])
-        self.API = tweepy.API(auth)
         if os.path.isfile('../tmp/last_reqs.pickle'):
             with open(os.path.join('../tmp', 'last_reqs.pickle'), 'rb') as fh:
                 self.last_reqs = pickle.load(fh)
         else:
             open(os.path.join('../tmp', 'last_reqs.pickle'), 'w').close()
             self.last_reqs = deque(maxlen=100)
-
-        self.DEBUG = debug
-
-    def print_tweets(self):
-        api = self.API
-        data = api.mentions_timeline(count=100)
-        for d in data:
-            print(d._json['text'])
 
     @staticmethod
     def asks_time(body):
@@ -112,7 +94,7 @@ class TweeterSpeakingClock(object):
         while clock_is_on:
             print("Checking for times...")
             self.check_tweets()
-            time.sleep(300)
+            time.sleep(30)
 
 if __name__ == '__main__':
     t = TweeterSpeakingClock(debug=False)
