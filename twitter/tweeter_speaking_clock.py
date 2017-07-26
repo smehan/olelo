@@ -14,10 +14,8 @@ import pickle
 
 # 3rd-party libs
 import tweepy
-import yaml
 
 # application libs
-from persistance.redis_db import RedisDB
 from twitter.tweeter import Tweeter
 import translations.time_as_words as taw
 

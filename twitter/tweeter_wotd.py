@@ -6,11 +6,9 @@
 #  -*- coding: utf-8 -*-
 
 # standard libs
-import os
 
 # 3rd-party libs
 import tweepy
-import yaml
 
 # application libs
 from persistance.redis_db import RedisDB

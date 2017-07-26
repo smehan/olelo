@@ -11,7 +11,6 @@ import pytest
 
 # app modules
 from twitter.tweeter_speaking_clock import TweeterSpeakingClock
-from twitter.tweeter import Tweeter
 
 
 class TestTweeterSpeakingClock(object):

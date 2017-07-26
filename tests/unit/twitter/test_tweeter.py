@@ -10,7 +10,6 @@
 import pytest
 
 # app modules
-from processor.ulu_processor import Processor
 from twitter.tweeter import Tweeter
 
 
