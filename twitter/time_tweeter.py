@@ -10,6 +10,7 @@
 import os
 import time
 from collections import deque
+import pickle
 
 # 3rd-party libs
 import tweepy
@@ -20,7 +21,7 @@ from persistance.redis_db import RedisDB
 import translations.time_as_words as taw
 
 
-class StreamListener(tweepy.StreamListener):
+class TweeterSpeakingClock(object):
 
     def __init__(self, debug=True):
         super().__init__()
@@ -36,17 +37,14 @@ class StreamListener(tweepy.StreamListener):
         auth = tweepy.OAuthHandler(cfg['consumer_key'], cfg['consumer_secret'])
         auth.set_access_token(cfg['access_token'], cfg['access_token_secret'])
         self.API = tweepy.API(auth)
-        self.last_reqs = deque(maxlen=100)
-        #self.STREAM = tweepy.Stream(auth, self)
+        if os.path.isfile('../tmp/last_reqs.pickle'):
+            with open(os.path.join('../tmp', 'last_reqs.pickle'), 'rb') as fh:
+                self.last_reqs = pickle.load(fh)
+        else:
+            open(os.path.join('../tmp', 'last_reqs.pickle'), 'w').close()
+            self.last_reqs = deque(maxlen=100)
 
         self.DEBUG = debug
-
-    def on_status(self, status):
-        print(status.text)
-
-    def on_error(self, status_code):
-        if status_code == 420:
-            return False
 
     def print_tweets(self):
         api = self.API
@@ -54,12 +52,18 @@ class StreamListener(tweepy.StreamListener):
         for d in data:
             print(d._json['text'])
 
-    def asks_time(self, body):
-            if 'ʻO ka hola ʻehia kēia?' in body:
-                return True
-            return False
+    @staticmethod
+    def asks_time(body):
+        time_questions = ['ʻO ka hola ʻehia kēia?',
+                          "'O ka hola 'ehia keia?",
+                          'What time is it?',
+                          "What's the time?"]
+        for q in time_questions:
+            if q.lower() in body.lower(): return True
+        return False
 
-    def build_time(self, name):
+    @staticmethod
+    def build_time(name):
         ts = taw.time_to_words("now")
         return f"E @{name}, " + ts
 
@@ -71,7 +75,8 @@ class StreamListener(tweepy.StreamListener):
             api.update_status(status=body,
                               in_reply_to_status_id_str=status_id)
 
-    def build_link(self, screen_name, tweet_id):
+    @staticmethod
+    def build_link(screen_name, tweet_id):
         return f"https://twitter.com/{screen_name}/status/{tweet_id}"
 
     def post_time_retweet(self, reply_to, user):
@@ -80,8 +85,11 @@ class StreamListener(tweepy.StreamListener):
         if self.DEBUG:
             print(body)
         else:
-            api.update_status(status=body,
-                              in_reply_to_status_id_str=reply_to._json['id_str'])
+            try:
+                api.update_status(status=body,
+                                  in_reply_to_status_id_str=reply_to._json['id_str'])
+            except tweepy.error.TweepError as e:
+                print(e)
 
     def check_tweets(self):
         api = self.API
@@ -92,23 +100,20 @@ class StreamListener(tweepy.StreamListener):
             self.last_reqs.appendleft(rt._json['id_str'])
             if self.asks_time(rt._json['text']):
                 user = api.get_user(user_id=rt._json['user']['id'])
-                self.post_time_reply(status_id=rt._json['id_str'],
-                                     body=self.build_time(user._json['screen_name']))
+                #self.post_time_reply(status_id=rt._json['id_str'],
+                #                     body=self.build_time(user._json['screen_name']))
                 self.post_time_retweet(reply_to=rt,
                                        user=user)
+        with open(os.path.join('../tmp', 'last_reqs.pickle'), 'wb') as fh:
+            pickle.dump(self.last_reqs, fh)
 
     def speaking_clock(self):
         clock_is_on = True
         while clock_is_on:
             print("Checking for times...")
             self.check_tweets()
-            time.sleep(250)
+            time.sleep(300)
 
 if __name__ == '__main__':
-    t = StreamListener(debug=False)
+    t = TweeterSpeakingClock(debug=False)
     t.speaking_clock()
-    #stream_listener = StreamListener()
-    stream = tweepy.Stream(auth=t.API.auth, listener=t)
-    #stream = tweepy.Stream(auth=api.auth, listener=stream_listener)
-    #stream.filter(track=["KaKa_Olelo", "hawaiianclock, HawaiianClock, HawaiianClock"])
-    stream.userstream(replies=all)
