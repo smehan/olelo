@@ -24,14 +24,15 @@ import translations.time_as_words as taw
 
 class TweeterSpeakingClock(Tweeter):
 
-    def __init__(self, debug=True, **kargs):
+    def __init__(self, **kargs):
         super().__init__(**kargs)
 
-        if os.path.isfile('../tmp/last_reqs.pickle'):
-            with open(os.path.join('../tmp', 'last_reqs.pickle'), 'rb') as fh:
+        pickle_path = os.path.join(os.path.dirname(os.path.abspath(__file__)).rsplit("/", 1)[0], 'tmp', 'last_reqs.pickle')
+        if os.path.isfile(pickle_path):
+            with open(pickle_path, 'rb') as fh:
                 self.last_reqs = pickle.load(fh)
         else:
-            open(os.path.join('../tmp', 'last_reqs.pickle'), 'w').close()
+            open(pickle_path, 'w').close()
             self.last_reqs = deque(maxlen=100)
 
     @staticmethod
