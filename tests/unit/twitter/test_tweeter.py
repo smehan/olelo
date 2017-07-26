@@ -1,5 +1,5 @@
 # Copyright (C) 2017 Shawn Mehan <shawn dot mehan at shawnmehan dot com>
-# Tests for TweeterWOTD for connecting to twitter and interacting with DB
+# Tests for Tweeter for connecting to twitter
 ###########################################################
 #
 #  -*- coding: utf-8 -*-
@@ -11,14 +11,14 @@ import pytest
 
 # app modules
 from processor.ulu_processor import Processor
-from twitter.tweeter import TweeterWOTD
+from twitter.tweeter import Tweeter
 
 
 class TestTweeter(object):
 
     def setup_class(self):
         print("\nTestTweeter setting up ...\n\n")
-        self.t = TweeterWOTD(debug=True)
+        self.t = Tweeter(debug=True)
 
     @classmethod
     def teardown_class(cls):
