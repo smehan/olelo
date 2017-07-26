@@ -81,6 +81,8 @@ class TweeterSpeakingClock(Tweeter):
             if rt._json['id_str'] in self.last_reqs:
                 continue
             self.last_reqs.appendleft(rt._json['id_str'])
+            if rt._json['user']['screen_name'] == "Kaka_Olelo":
+                continue
             if self.asks_time(rt._json['text']):
                 user = api.get_user(user_id=rt._json['user']['id'])
                 #self.post_time_reply(status_id=rt._json['id_str'],
