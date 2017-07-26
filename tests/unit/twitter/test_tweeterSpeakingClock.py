@@ -20,7 +20,8 @@ class TestTweeterSpeakingClock(object):
                              ('ʻO ka hola ʻehia kēia?', True),
                              ("'O ka hola 'ehia keia?", True),
                              ('What time is it?', True),
-                             ("What's the time?", True)])
+                             ("What's the time?", True),
+                             ("I should fail", False)])
     def test_asks_time(self, test_q, expected):
         t = TweeterSpeakingClock()
         assert t.asks_time(test_q) == expected

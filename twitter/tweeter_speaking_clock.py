@@ -37,10 +37,10 @@ class TweeterSpeakingClock(Tweeter):
 
     @staticmethod
     def asks_time(body):
-        time_questions = ['ʻO ka hola ʻehia kēia?',
-                          "'O ka hola 'ehia keia?",
-                          'What time is it?',
-                          "What's the time?"]
+        time_questions = ['ʻO ka hola ʻehia kēia',
+                          "'O ka hola 'ehia keia",
+                          'What time is it',
+                          "What's the time"]
         for q in time_questions:
             if q.lower() in body.lower(): return True
         return False
