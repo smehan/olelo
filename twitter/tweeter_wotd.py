@@ -16,8 +16,8 @@ from twitter.tweeter import Tweeter
 
 
 class TweeterWOTD(Tweeter, RedisDB):
-    def __init__(self, **kargs):
-        super().__init__(**kargs)
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
 
     def push_tweet(self, hw, defs):
         api = self.API

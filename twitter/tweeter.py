@@ -15,8 +15,8 @@ import yaml
 # application libs
 
 class Tweeter(object):
-    def __init__(self, debug=True, **kargs):
-        super().__init__(**kargs)
+    def __init__(self, debug=True, **kwargs):
+        super().__init__(**kwargs)
 
         #init_logging()
         #self.logger = logging.getLogger(__name__)

@@ -25,8 +25,8 @@ class RedisDB(object):
     Base class with base connection and methods for interacting with Redis DB
     """
 
-    def __init__(self, **kargs):
-        super().__init__(**kargs)
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
         self.rdb = redis.StrictRedis()
         self.encoding = 'utf-8'
 
