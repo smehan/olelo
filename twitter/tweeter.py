@@ -14,6 +14,7 @@ import yaml
 
 # application libs
 
+
 class Tweeter(object):
     def __init__(self, debug=True, **kwargs):
         super().__init__(**kwargs)
@@ -31,7 +32,6 @@ class Tweeter(object):
         self.API = tweepy.API(auth)
 
         self.DEBUG = debug
-
 
     def print_tweets(self):
         api = self.API

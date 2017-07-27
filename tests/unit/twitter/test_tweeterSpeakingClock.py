@@ -23,5 +23,5 @@ class TestTweeterSpeakingClock(object):
                              ("I should fail", False)])
     def test_asks_time(self, test_q, expected):
         t = TweeterSpeakingClock()
-        assert t.asks_time(test_q) == expected
+        assert t._asks_time(test_q) == expected
 

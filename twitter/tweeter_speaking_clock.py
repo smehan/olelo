@@ -34,7 +34,7 @@ class TweeterSpeakingClock(Tweeter):
             self.last_reqs = deque(maxlen=100)
 
     @staticmethod
-    def asks_time(body):
+    def _asks_time(body):
         time_questions = ['ʻO ka hola ʻehia kēia',
                           "'O ka hola 'ehia keia",
                           'What time is it',
@@ -44,7 +44,7 @@ class TweeterSpeakingClock(Tweeter):
         return False
 
     @staticmethod
-    def build_time(name: str) -> str:
+    def _build_time(name: str) -> str:
         ts = taw.time_to_words("now")
         return f"E @{name}, " + ts
 
@@ -62,7 +62,7 @@ class TweeterSpeakingClock(Tweeter):
 
     def post_time_retweet(self, reply_to: tweepy, user: tweepy):
         api = self.API
-        body = f"{self.build_time(user._json['screen_name'])} {self.build_link(user._json['screen_name'], reply_to._json['id_str'])}"
+        body = f"{self._build_time(user._json['screen_name'])} {self.build_link(user._json['screen_name'], reply_to._json['id_str'])}"
         if self.DEBUG:
             print(body)
         else:
@@ -81,10 +81,10 @@ class TweeterSpeakingClock(Tweeter):
             self.last_reqs.appendleft(rt._json['id_str'])
             if rt._json['user']['screen_name'] == "Kaka_Olelo":
                 continue
-            if self.asks_time(rt._json['text']):
+            if self._asks_time(rt._json['text']):
                 user = api.get_user(user_id=rt._json['user']['id'])
                 #self.post_time_reply(status_id=rt._json['id_str'],
-                #                     body=self.build_time(user._json['screen_name']))
+                #                     body=self._build_time(user._json['screen_name']))
                 self.post_time_retweet(reply_to=rt,
                                        user=user)
         with open(os.path.join('../tmp', 'last_reqs.pickle'), 'wb') as fh:
