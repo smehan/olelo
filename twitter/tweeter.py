@@ -40,10 +40,6 @@ class Tweeter(object):
             return d._json['text']
 
 
-
-
 if __name__ == "__main__":
-    t = TweeterWOTD(debug=True)
+    t = Tweeter(debug=True)
     print(t.print_tweets())
-    t.make_tweet_of_day()
-    t.find_a_new_friend()

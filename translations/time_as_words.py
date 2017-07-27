@@ -26,14 +26,14 @@ words_dict = {1: 'ʻekahi', 2: 'ʻelua', 3: 'ʻekolu', 4: 'ʻehā', 5: 'ʻelima'
               29: "iwakālua-kūmā-iwa"}
 
 
-def time_to_words(ts: str):
+def time_to_words(ts: str) -> str:
     try:
         return form_words(*parse_time(ts))
     except AttributeError as e:
         raise ValueError(f"{ts} must be either a hh:mm time or now...")
 
 
-def parse_time(s: str):
+def parse_time(s: str) -> str:
     """
     Extracts hour and minute values or computes those values for
     now.
@@ -52,7 +52,7 @@ def parse_time(s: str):
         return parse_time(now)
 
 
-def fmt_minutes(h: int, m: int):
+def fmt_minutes(h: int, m: int) -> (int, str):
     if m < 16:
         words = ''
     elif m < 46:
@@ -63,7 +63,7 @@ def fmt_minutes(h: int, m: int):
     return h, words
 
 
-def fmt_hours(h: int):
+def fmt_hours(h: int) -> str:
     if h < 3:
         return f"{words_dict[h]}" + " kēia o ka ʻaumoe" # 23-03
     if h < 5:
@@ -84,6 +84,6 @@ def fmt_hours(h: int):
         return f"{words_dict[h]}" + " kēia o ka ʻaumoe" # 23 - 03
 
 
-def form_words(hh: int, mm: int):
+def form_words(hh: int, mm: int) -> str:
     hh, minutes_part = fmt_minutes(hh, mm)
     return f'ʻO ka {minutes_part} hola {fmt_hours(hh)}.'.replace('  ', ' ')

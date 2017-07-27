@@ -6,6 +6,7 @@
 
 # standard modules
 import datetime as dt
+import pytz
 
 # 3rd-party modules
 import pytest
@@ -33,7 +34,8 @@ class TestTimeToWords(object):
         # assert time_to_words("12:00") == "ʻO ka hola ʻumikūmā o ka ʻauwe."
 
     def test_parse_time(self):
-        assert parse_time("now") == parse_time(dt.datetime.now().strftime("%H:%M"))
+        hawaii_tz = pytz.timezone("US/Hawaii")
+        assert parse_time("now") == parse_time(dt.datetime.now(tz=hawaii_tz).strftime("%H:%M"))
         assert parse_time("01:00") == (1, 00)
         assert parse_time("23:59") == (23, 59)
 

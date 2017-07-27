@@ -44,11 +44,11 @@ class TweeterSpeakingClock(Tweeter):
         return False
 
     @staticmethod
-    def build_time(name):
+    def build_time(name: str) -> str:
         ts = taw.time_to_words("now")
         return f"E @{name}, " + ts
 
-    def post_time_reply(self, status_id, body):
+    def post_time_reply(self, status_id, body: str):
         api = self.API
         if self.DEBUG:
             print(f"{status_id} gets the tweet: {body}")
@@ -57,10 +57,10 @@ class TweeterSpeakingClock(Tweeter):
                               in_reply_to_status_id_str=status_id)
 
     @staticmethod
-    def build_link(screen_name, tweet_id):
+    def build_link(screen_name: str, tweet_id: str) -> str:
         return f"https://twitter.com/{screen_name}/status/{tweet_id}"
 
-    def post_time_retweet(self, reply_to, user):
+    def post_time_retweet(self, reply_to: tweepy, user: tweepy):
         api = self.API
         body = f"{self.build_time(user._json['screen_name'])} {self.build_link(user._json['screen_name'], reply_to._json['id_str'])}"
         if self.DEBUG:
