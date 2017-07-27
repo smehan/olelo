@@ -26,7 +26,7 @@ class RedisDB(object):
     """
 
     def __init__(self, **kargs):
-        super.__init__(**kargs)
+        super().__init__(**kargs)
         self.rdb = redis.StrictRedis()
         self.encoding = 'utf-8'
 
