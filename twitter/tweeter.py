@@ -33,6 +33,9 @@ class Tweeter(object):
 
         self.DEBUG = debug
 
+    def __repr__(self):
+        return f'< {self.__class__.__name__} using screen {self.screen_name} >'
+
     def print_tweets(self):
         api = self.API
         data = api.user_timeline(screen_name=self.screen_name, count=100, include_rts=True)

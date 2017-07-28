@@ -6,6 +6,7 @@
 #  -*- coding: utf-8 -*-
 
 # standard libs
+import itertools
 
 # 3rd-party libs
 import tweepy
@@ -30,7 +31,7 @@ class TweeterWOTD(Tweeter, RedisDB):
     def make_tweet_of_day(self):
         huid = self._get_random_key()
         hw_hash = self._all_hash('haw:id')
-        for k, v in hw_hash.items():
+        for k, v in iter(hw_hash.items()):
             if v == huid:
                 word_defs = self._all_values_from_hash(':'.join(['defs', huid]))
                 word_pos = self.rdb.smembers(':'.join(['pos', huid]))
