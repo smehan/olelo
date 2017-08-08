@@ -13,7 +13,7 @@ import pickle
 
 # application libs
 from redis_db import RedisDB
-from grammar import HAW_POS
+from processor.grammar import HAW_POS
 
 
 class RedisLoader(RedisDB):
