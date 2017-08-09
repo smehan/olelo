@@ -9,6 +9,7 @@
 # standard libs
 import os
 import time
+import datetime as dt
 from collections import deque
 import pickle
 
@@ -41,6 +42,16 @@ class TweeterSpeakingClock(Tweeter):
                           "What's the time"]
         for q in time_questions:
             if q.lower() in body.lower(): return True
+        return False
+
+    def is_stale(self, t: dt.datetime, period=3.0) -> bool:
+        """
+        Determine if the tweet is older than a param
+        :param t: a Tweepy object with a datetime attr
+        :return:
+        """
+        if self.twitter_now() - self.twitter_time(t.created_at) > dt.timedelta(hours=period):
+            return True
         return False
 
     @staticmethod
@@ -77,6 +88,8 @@ class TweeterSpeakingClock(Tweeter):
         recent_tweets = api.mentions_timeline(count=100)
         for rt in recent_tweets:
             if rt._json['id_str'] in self.last_reqs:
+                continue
+            if self.is_stale(rt.created_at):
                 continue
             self.last_reqs.appendleft(rt._json['id_str'])
             if rt._json['user']['screen_name'] == "Kaka_Olelo":

@@ -8,6 +8,8 @@
 # standard libs
 import os
 import logging
+import datetime as dt
+import pytz
 
 # 3rd-party libs
 import tweepy
@@ -43,6 +45,21 @@ class Tweeter(object):
         data = api.user_timeline(screen_name=self.screen_name, count=100, include_rts=True)
         for d in data:
             return d._json['text']
+
+    @staticmethod
+    def twitter_now() -> dt.datetime:
+        twitter_tz = pytz.timezone("US/Hawaii")
+        now = dt.datetime.now(tz=pytz.utc).strftime("%H:%M")
+        return dt.datetime.now(tz=pytz.utc)
+
+    @staticmethod
+    def twitter_time(twitter_time: dt.datetime) -> dt.datetime:
+        """
+        returns a localized dt object corresponding to the twitter UTC tz
+        :param twitter_time:
+        :return:
+        """
+        return twitter_time.replace(tzinfo=pytz.utc)
 
 
 if __name__ == "__main__":
