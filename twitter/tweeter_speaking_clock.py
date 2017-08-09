@@ -1,7 +1,7 @@
 ###########################################################
 # Copyright (C) 2017 Shawn Mehan <shawn dot mehan at shawnmehan dot com>
 # Class to instantiate a twitter stream listener to listen for requests for
-# what time is it.
+# answering what time is it.
 ###########################################################
 #
 #  -*- coding: utf-8 -*-
@@ -10,8 +10,7 @@
 import os
 import time
 import datetime as dt
-from collections import deque
-import pickle
+from qr import CappedCollection
 
 # 3rd-party libs
 import tweepy
@@ -26,13 +25,7 @@ class TweeterSpeakingClock(Tweeter):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-        pickle_path = os.path.join(os.path.dirname(os.path.abspath(__file__)).rsplit("/", 1)[0], 'tmp', 'last_reqs.pickle')
-        if os.path.isfile(pickle_path):
-            with open(pickle_path, 'rb') as fh:
-                self.last_reqs = pickle.load(fh)
-        else:
-            open(pickle_path, 'w').close()
-            self.last_reqs = deque(maxlen=100)
+        self.last_reqs = CappedCollection('speaking_clock_reqs', 100)
 
     @staticmethod
     def _asks_time(body):
@@ -44,10 +37,11 @@ class TweeterSpeakingClock(Tweeter):
             if q.lower() in body.lower(): return True
         return False
 
-    def is_stale(self, t: dt.datetime, period=3.0) -> bool:
+    def is_stale(self, t: tweepy, period=3.0) -> bool:
         """
-        Determine if the tweet is older than a param
+        Determine if the tweet is older than period
         :param t: a Tweepy object with a datetime attr
+        :param period: the period of time beyond which a tweet is considered stale
         :return:
         """
         if self.twitter_now() - self.twitter_time(t.created_at) > dt.timedelta(hours=period):
@@ -91,7 +85,7 @@ class TweeterSpeakingClock(Tweeter):
                 continue
             if self.is_stale(rt.created_at):
                 continue
-            self.last_reqs.appendleft(rt._json['id_str'])
+            self.last_reqs.push(rt._json['id_str'])
             if rt._json['user']['screen_name'] == "Kaka_Olelo":
                 continue
             if self._asks_time(rt._json['text']):
@@ -100,8 +94,6 @@ class TweeterSpeakingClock(Tweeter):
                 #                     body=self._build_time(user._json['screen_name']))
                 self.post_time_retweet(reply_to=rt,
                                        user=user)
-        with open(os.path.join('../tmp', 'last_reqs.pickle'), 'wb') as fh:
-            pickle.dump(self.last_reqs, fh)
 
     def speaking_clock(self):
         clock_is_on = True

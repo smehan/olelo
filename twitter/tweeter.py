@@ -48,8 +48,6 @@ class Tweeter(object):
 
     @staticmethod
     def twitter_now() -> dt.datetime:
-        twitter_tz = pytz.timezone("US/Hawaii")
-        now = dt.datetime.now(tz=pytz.utc).strftime("%H:%M")
         return dt.datetime.now(tz=pytz.utc)
 
     @staticmethod
