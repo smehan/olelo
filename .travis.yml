@@ -1,0 +1,16 @@
+{
+  "language": "python",
+  "sudo": false,
+  "dist": "trusty",
+  "python": "3.6",
+  "env": "DIST=trusty STACK=EC2",
+  "install": [
+    true
+  ],
+  "script": [
+    "source ~/virtualenv/python3.5/bin/activate",
+    "python --version"
+  ],
+  "group": "stable",
+  "os": "linux"
+}
