@@ -23,7 +23,7 @@ class TweeterWOTD(Tweeter, RedisDB):
         api = self.API
         tweet = f"#Hawaiian: {hw} - {defs}"
         if self.DEBUG:
-            self.logger.debug(f'About to tweet: {tweet}')
+            self.logger.info(f'About to tweet: {tweet}')
         else:
             status = api.update_status(status=tweet)
 
@@ -36,6 +36,7 @@ class TweeterWOTD(Tweeter, RedisDB):
                 word_pos = self.rdb.smembers(':'.join(['pos', huid]))
                 self.logger.info(f'POS - {word_pos}')
                 self.push_tweet(k, word_defs)
+                return
 
     def find_a_new_friend(self):
         api = self.API
