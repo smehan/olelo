@@ -7,21 +7,23 @@
 
 # standard libs
 import os
+import logging
 
 # 3rd-party libs
 import tweepy
 import yaml
 
 # application libs
+import loggerUtils as lg
 
 
 class Tweeter(object):
     def __init__(self, debug=True, **kwargs):
         super().__init__(**kwargs)
 
-        #init_logging()
-        #self.logger = logging.getLogger(__name__)
-        #self.logger.info("Job started and logging enabled")
+        lg.loggerutils.init_logging()
+        self.logger = logging.getLogger(__name__)
+        self.logger.info("Olelo twitter started and logging enabled")
 
         with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "local.cfg"), "r") as fh:
             cfg = yaml.load(fh)
@@ -45,4 +47,4 @@ class Tweeter(object):
 
 if __name__ == "__main__":
     t = Tweeter(debug=True)
-    print(t.print_tweets())
+    t.logger.info(t.print_tweets())

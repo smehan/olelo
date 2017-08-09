@@ -6,7 +6,6 @@
 #  -*- coding: utf-8 -*-
 
 # standard libs
-import itertools
 
 # 3rd-party libs
 import tweepy
@@ -24,7 +23,7 @@ class TweeterWOTD(Tweeter, RedisDB):
         api = self.API
         tweet = f"#Hawaiian: {hw} - {defs}"
         if self.DEBUG:
-            print(f'About to tweet: {tweet}')
+            self.logger.debug(f'About to tweet: {tweet}')
         else:
             status = api.update_status(status=tweet)
 
@@ -35,7 +34,7 @@ class TweeterWOTD(Tweeter, RedisDB):
             if v == huid:
                 word_defs = self._all_values_from_hash(':'.join(['defs', huid]))
                 word_pos = self.rdb.smembers(':'.join(['pos', huid]))
-                print(f'POS - {word_pos}')
+                self.logger.info(f'POS - {word_pos}')
                 self.push_tweet(k, word_defs)
 
     def find_a_new_friend(self):
@@ -47,12 +46,12 @@ class TweeterWOTD(Tweeter, RedisDB):
             for user in result:
                 if user.following is False and 'hawaii' in user.description.lower():
                     try:
-                        print(f"friended {user.id}")
+                        self.logger.info(f"friended {user.id}")
                         api.create_friendship(id=user.id)
                         found_one = True
                         break
                     except tweepy.error.TweepError as e:
-                        print(e)
+                        self.logger.error(e)
             page += 1
 
 

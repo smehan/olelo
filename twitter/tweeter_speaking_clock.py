@@ -51,7 +51,7 @@ class TweeterSpeakingClock(Tweeter):
     def post_time_reply(self, status_id, body: str):
         api = self.API
         if self.DEBUG:
-            print(f"{status_id} gets the tweet: {body}")
+            self.logger.debug(f"{status_id} gets the tweet: {body}")
         else:
             api.update_status(status=body,
                               in_reply_to_status_id_str=status_id)
@@ -64,13 +64,13 @@ class TweeterSpeakingClock(Tweeter):
         api = self.API
         body = f"{self._build_time(user._json['screen_name'])} {self.build_link(user._json['screen_name'], reply_to._json['id_str'])}"
         if self.DEBUG:
-            print(body)
+            self.logger.debug(body)
         else:
             try:
                 api.update_status(status=body,
                                   in_reply_to_status_id_str=reply_to._json['id_str'])
             except tweepy.error.TweepError as e:
-                print(e)
+                self.logger.error(e)
 
     def check_tweets(self):
         api = self.API
@@ -93,10 +93,10 @@ class TweeterSpeakingClock(Tweeter):
     def speaking_clock(self):
         clock_is_on = True
         while clock_is_on:
-            print("Checking for times...")
+            self.logger.info(f"Checking for times...")
             self.check_tweets()
             time.sleep(30)
 
 if __name__ == '__main__':
-    t = TweeterSpeakingClock(debug=False)
+    t = TweeterSpeakingClock(debug=True)
     t.speaking_clock()
