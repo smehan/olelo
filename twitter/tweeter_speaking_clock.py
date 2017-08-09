@@ -25,6 +25,7 @@ class TweeterSpeakingClock(Tweeter):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
+        self.sleep = 30  # in seconds
         self.last_reqs = CappedCollection('speaking_clock_reqs', 100)
 
     @staticmethod
@@ -100,7 +101,7 @@ class TweeterSpeakingClock(Tweeter):
         while clock_is_on:
             self.logger.info(f"Checking for times...")
             self.check_tweets()
-            time.sleep(30)
+            time.sleep(self.sleep)
 
 if __name__ == '__main__':
     t = TweeterSpeakingClock(debug=True)
