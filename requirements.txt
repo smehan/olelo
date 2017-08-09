@@ -5,6 +5,7 @@ idna==2.5
 oauthlib==2.0.2
 pytz==2017.2
 PyYAML==3.12
+qr==0.6.0
 redis==2.10.5
 requests==2.18.3
 requests-oauthlib==0.8.0
