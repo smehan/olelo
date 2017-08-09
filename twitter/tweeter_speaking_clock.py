@@ -104,5 +104,5 @@ class TweeterSpeakingClock(Tweeter):
             time.sleep(self.sleep)
 
 if __name__ == '__main__':
-    t = TweeterSpeakingClock(debug=True)
+    t = TweeterSpeakingClock(debug=False)
     t.speaking_clock()
