@@ -46,6 +46,14 @@ class Tweeter(object):
         for d in data:
             return d._json['text']
 
+    def tweeted_today(self):
+        """Checks if a tweet was posted today"""
+        api = self.API
+        last_tweet = api.user_timeline(screen_name=self.screen_name, count=1, include_rts=False)
+        if last_tweet[0].created_at.date() == dt.date.today():
+            return True
+        return False
+
     @staticmethod
     def twitter_now() -> dt.datetime:
         return dt.datetime.now(tz=pytz.utc)
