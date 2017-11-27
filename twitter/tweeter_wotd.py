@@ -6,6 +6,7 @@
 #  -*- coding: utf-8 -*-
 
 # standard libs
+from itertools import chain
 
 # 3rd-party libs
 import tweepy
@@ -18,17 +19,26 @@ from twitter.tweeter import Tweeter
 class TweeterWOTD(Tweeter, RedisDB):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+        self.MAX_LENGTH = 280
 
     def push_tweet(self, hw, defs):
         api = self.API
         tweet = f"#Hawaiian: {hw} - {defs}"
         if self.DEBUG:
+            if not self.is_good_length(tweet):
+                self.logger.warn(f'TOO LONG: {len(tweet)}')
             self.logger.info(f'About to tweet: {tweet}')
         else:
             status = api.update_status(status=tweet)
 
+    def is_good_length(self, tweet):
+        """Checks a tweet for length of less than Max"""
+        if len(tweet) >= self.MAX_LENGTH:
+            return False
+        return True
+
     @staticmethod
-    def _clean_line(text: str) -> str:
+    def _clean_line(text: str)-> str:
         """Remove unneeded characters from string"""
         UNNEEDED_CHARS = ['[', ']', "'"]
         ALT_TEXT = {'Cf.': 'See also'}
@@ -38,15 +48,16 @@ class TweeterWOTD(Tweeter, RedisDB):
             text.replace(k, v)
         return text
 
-    def clean_text(self, text):
-        """Process definitions body"""
-        if isinstance(text, str):
-            new_text = self._clean_line(text)
-        elif isinstance(text, list):
-            new_text = []
-            for e in text:
-                new_text.append(self._clean_line(e))
-        return new_text
+    def form_def(self, defs)-> str:
+        """Form a str to use as the tweet def"""
+        if isinstance(defs, str):
+            new_defs = self._clean_line(defs)
+        elif isinstance(defs, list):
+            new_list = []
+            for e in defs:
+                new_list.append(self._clean_line(e))
+            new_defs = "".join(*new_list)
+        return new_defs
 
     def make_tweet_of_day(self):
         huid = self._get_random_key()
@@ -56,8 +67,7 @@ class TweeterWOTD(Tweeter, RedisDB):
                 word_defs = self._all_values_from_hash(':'.join(['defs', huid]))
                 word_pos = self.rdb.smembers(':'.join(['pos', huid]))
                 self.logger.info(f'POS - {word_pos}')
-                nt = self.clean_text(word_defs)
-                self.push_tweet(k, nt)
+                self.push_tweet(k, self.form_def(word_defs))
                 return
 
     def find_a_new_friend(self):
