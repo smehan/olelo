@@ -56,7 +56,7 @@ class TweeterWOTD(Tweeter, RedisDB):
             new_list = []
             for e in defs:
                 new_list.append(self._clean_line(e))
-            new_defs = "".join(new_list)
+            new_defs = " ".join(new_list)
         return new_defs
 
     def make_tweet_of_day(self):
@@ -94,5 +94,5 @@ class TweeterWOTD(Tweeter, RedisDB):
 if __name__ == "__main__":
     t = TweeterWOTD(debug=True)
     print(t.print_tweets())
-    t.make_tweet_of_day()
     t.find_a_new_friend()
+    t.make_tweet_of_day()
