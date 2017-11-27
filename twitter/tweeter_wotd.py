@@ -27,6 +27,27 @@ class TweeterWOTD(Tweeter, RedisDB):
         else:
             status = api.update_status(status=tweet)
 
+    @staticmethod
+    def _clean_line(text):
+        """Remove unneeded characters from string"""
+        UNNEEDED_CHARS = ['[', ']', "'"]
+        ALT_TEXT = {'Cf.': 'See also'}
+        for c in UNNEEDED_CHARS:
+            text.replace(c, '')
+        for k, v in ALT_TEXT.items():
+            text.replace(k, v)
+        return text
+
+    def clean_text(self, text):
+        """Remove unneeded characters from definitions body"""
+        if isinstance(text, str):
+            new_text = self._clean_line(text)
+        elif isinstance(text, list):
+            new_text = []
+            for e in text:
+                new_text.append(self._clean_line(e))
+        return new_text
+
     def make_tweet_of_day(self):
         huid = self._get_random_key()
         hw_hash = self._all_hash('haw:id')
@@ -35,7 +56,8 @@ class TweeterWOTD(Tweeter, RedisDB):
                 word_defs = self._all_values_from_hash(':'.join(['defs', huid]))
                 word_pos = self.rdb.smembers(':'.join(['pos', huid]))
                 self.logger.info(f'POS - {word_pos}')
-                self.push_tweet(k, word_defs)
+                nt = self.clean_text(word_defs)
+                self.push_tweet(k, nt)
                 return
 
     def find_a_new_friend(self):
@@ -60,4 +82,4 @@ if __name__ == "__main__":
     t = TweeterWOTD(debug=True)
     print(t.print_tweets())
     t.make_tweet_of_day()
-    t.find_a_new_friend()
+    #t.find_a_new_friend()
