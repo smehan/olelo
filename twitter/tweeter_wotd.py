@@ -28,7 +28,7 @@ class TweeterWOTD(Tweeter, RedisDB):
             status = api.update_status(status=tweet)
 
     @staticmethod
-    def _clean_line(text):
+    def _clean_line(text: str) -> str:
         """Remove unneeded characters from string"""
         UNNEEDED_CHARS = ['[', ']', "'"]
         ALT_TEXT = {'Cf.': 'See also'}
