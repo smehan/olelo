@@ -39,7 +39,7 @@ class TweeterWOTD(Tweeter, RedisDB):
         return text
 
     def clean_text(self, text):
-        """Remove unneeded characters from definitions body"""
+        """Process definitions body"""
         if isinstance(text, str):
             new_text = self._clean_line(text)
         elif isinstance(text, list):
