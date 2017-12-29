@@ -1,6 +1,6 @@
 ###########################################################
 # Copyright (C) 2017 Shawn Mehan <shawn dot mehan at shawnmehan dot com>
-# Processor for transforming source html into usable data
+# Processor for transforming dictionary source html into usable data
 ###########################################################
 #
 #  -*- coding: utf-8 -*-
