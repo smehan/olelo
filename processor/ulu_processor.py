@@ -285,6 +285,7 @@ class Processor(object):
             pickle.dump(new_words, fh)
         return new_words
 
+
 if __name__ == '__main__':
     ulu_proc = Processor()
     new_dic = ulu_proc.build_dict()
