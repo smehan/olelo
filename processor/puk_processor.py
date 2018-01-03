@@ -15,6 +15,7 @@ import pickle
 
 # 3rd-party libs
 from bs4 import BeautifulSoup, Tag
+from collections import defaultdict
 import pprint
 
 # application libs
@@ -98,7 +99,41 @@ class Processor(object):
         refs = self.get_puk_entries(page)
         pp = pprint.PrettyPrinter(indent=4)
         pp.pprint(refs)
-        return (self.build_source_entry(r) for r in refs)
+        self.split_entries(refs)
+        #return (self.build_source_entry(r) for r in refs)
+
+    @staticmethod
+    def split_entries(doc: list):
+        """
+        Given a doc with lines from html source, split the lines into
+        dict entries for each proverb.
+        :param doc:
+        :return:
+        """
+        out = defaultdict(list)
+        for r in doc:
+            print(r)
+        return out
+
+
+    def build_source_entry(self, tag: Tag) -> dict:
+        """
+        Given a bs4 tag will parse tag and return a dict of the
+        head word and content, including ref id.
+        :param tag: bs4 tag object found in original source
+        :return: dict: entry
+        """
+        # Firstly, we check to see if this is a word definition. Other cases not handled are
+        # letter section declaration or general text
+        if '.' in tag['id']:
+            head_word, content = self.parse_content(tag.text)
+            # need to pass a copy of tag to mark_haw to keep tag from being mutated
+            _, marked_content_haw = self.parse_content(self.mark_haw(copy.copy(tag)))
+            if head_word and content is not None:
+                return {head_word.replace('.', '').strip(): {'content': content,
+                                                             'marked_content_haw': marked_content_haw,
+                                                             'hw_stress': head_word.strip(),
+                                                             'id': [tag['id']]}}
 
 
 if __name__ == '__main__':
