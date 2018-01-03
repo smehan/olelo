@@ -69,8 +69,6 @@ class Processor(object):
         for e in p.find_all("p"):
             if ['image'] not in e.attrs.values():
                 elements.append(e)
-        if len(elements) % 3 != 0:
-            raise ValueError
         return elements
 
     @staticmethod
@@ -104,5 +102,5 @@ class Processor(object):
 
 
 if __name__ == '__main__':
-    puk_processor = Processor(names='chapter01.html')
+    puk_processor = Processor(names='chapter02.html')
     refs = puk_processor.prepare_source()
