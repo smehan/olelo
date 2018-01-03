@@ -1,5 +1,5 @@
 # Copyright (C) 2017 Shawn Mehan <shawn dot mehan at shawnmehan dot com>
-# Tests for Processor for transforming source html into usable data
+# Tests for Processor for transforming Ulu source html into usable data
 ###########################################################
 #
 #  -*- coding: utf-8 -*-
