@@ -38,15 +38,15 @@ class TweeterWOTD(Tweeter, RedisDB):
         return True
 
     @staticmethod
-    def _clean_line(text: str)-> str:
+    def _clean_line(s: str)-> str:
         """Remove unneeded characters from string"""
         UNNEEDED_CHARS = ['[', ']', "'"]
         ALT_TEXT = {'Cf.': 'See also'}
         for c in UNNEEDED_CHARS:
-            text.replace(c, '')
+            s.replace(c, '')
         for k, v in ALT_TEXT.items():
-            text.replace(k, v)
-        return text
+            s.replace(k, v)
+        return s
 
     def form_def(self, defs)-> str:
         """Form a str to use as the tweet def"""
