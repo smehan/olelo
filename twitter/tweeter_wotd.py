@@ -41,7 +41,8 @@ class TweeterWOTD(Tweeter, RedisDB):
     def _clean_line(s: str)-> str:
         """Remove unneeded characters from string"""
         UNNEEDED_CHARS = ['[', ']', "'"]
-        ALT_TEXT = {'Cf.': 'See also'}
+        ALT_TEXT = {'Cf.': 'See also',
+                    'Lit.': 'Literally'}
         for c in UNNEEDED_CHARS:
             s.replace(c, '')
         for k, v in ALT_TEXT.items():
