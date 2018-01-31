@@ -100,7 +100,7 @@ class Processor(object):
         refs = self.get_puk_entries(page)
         pp = pprint.PrettyPrinter(indent=4)
         pp.pprint(refs)
-        self.split_entries(refs)
+        print(self.split_entries(refs))
         #return (self.build_source_entry(r) for r in refs)
 
     def get_proverb(self, s: str)-> str:
@@ -108,12 +108,19 @@ class Processor(object):
         if s is None:
             return None
         s = unicodedata.normalize("NFKD", s)
-        #return s.strip("\'").split(" ", 1)[1]
         try:
             return re.match(self.CONTENT_PROV, s).group(1)
         except:
             print(f'\n\nFAILED TO SPLIT: {s}\n\n')
             return None
+
+    def get_body(self, s: str)-> str:
+        """given an body line from source, clean it and return.
+           Could be a translation or explanation with HAW content.
+        """
+        if s is None:
+            return None
+        return s
 
     def split_entries(self, doc: list):
         """
@@ -123,11 +130,18 @@ class Processor(object):
         :return:
         """
         out = defaultdict(list)
-        begin_entry = True
-        for r in doc:
+        doc_l = len(doc)
+        in_entry = False
+        for idx, r in enumerate(doc):
             if r.get('id'):
                 this_proverb = self.get_proverb(r.get_text())
                 print(f"headword {this_proverb}")
+                in_entry = True
+            elif in_entry and idx < doc_l-1:  # there are enough lines in doc left to hold another id
+                out[this_proverb].append(self.get_body(r.get_text()))
+                if doc[idx+1].get('id'): in_entry = False
+            elif in_entry and idx > doc_l-1:
+                out[this_proverb].append(self.get_body(r.get_text))
         return out
 
 
