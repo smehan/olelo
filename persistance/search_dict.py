@@ -30,7 +30,7 @@ class RedisSearch(RedisDB):
     def find_hw(self, huid=None, hw=None):
         """
         Given a valid HUID or Hawaiian headword,
-        will return the hawaiian hw
+        will print the hawaiian hw
         that is paired with that HUID as well as
         definitions and pos.
         :param huid: HUID token
