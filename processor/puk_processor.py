@@ -12,9 +12,10 @@ import copy
 import re
 from collections import Counter
 import pickle
+import unicodedata
 
 # 3rd-party libs
-from bs4 import BeautifulSoup, Tag
+from bs4 import BeautifulSoup, Tag, UnicodeDammit
 from collections import defaultdict
 import pprint
 
@@ -31,8 +32,8 @@ class Processor(object):
     TMPPATH = '../tmp/'
 
     # Regex patterns compiled here for speed
-    CONTENT_POS = re.compile(r'^(?:\d+\.\s)?[a-z.]+\.')
-    CONTENT_DEF = re.compile(r'^(?:\d+\.\s)?(.*)$')
+    CONTENT_PROV = '^(?:\d+)(?:\s*)([AĀEĒHIĪKLMNOŌPUŪWaāeēhiīklmnoōpuūw,ʻ‘\s].*)$'
+    #CONTENT_PROV = re.compile(r'^(?:\d+\.\s)?[a-z.\s]+\s')
 
     def __init__(self, path=None, names=None):
         """Constructor for Processor"""
@@ -55,7 +56,7 @@ class Processor(object):
         if fn is None:
             fn = os.path.join(self.srcpath, self.fname)
         with open(fn, 'r') as f:
-            return BeautifulSoup(f.read(), 'html.parser')
+            return BeautifulSoup(UnicodeDammit.detwingle(f.read()), 'html.parser')
 
     @staticmethod
     def get_puk_entries(p: BeautifulSoup) -> list:
@@ -102,8 +103,19 @@ class Processor(object):
         self.split_entries(refs)
         #return (self.build_source_entry(r) for r in refs)
 
-    @staticmethod
-    def split_entries(doc: list):
+    def get_proverb(self, s: str)-> str:
+        """given a proverb line from source, clean it and return"""
+        if s is None:
+            return None
+        s = unicodedata.normalize("NFKD", s)
+        #return s.strip("\'").split(" ", 1)[1]
+        try:
+            return re.match(self.CONTENT_PROV, s).group(1)
+        except:
+            print(f'\n\nFAILED TO SPLIT: {s}\n\n')
+            return None
+
+    def split_entries(self, doc: list):
         """
         Given a doc with lines from html source, split the lines into
         dict entries for each proverb.
@@ -111,8 +123,11 @@ class Processor(object):
         :return:
         """
         out = defaultdict(list)
+        begin_entry = True
         for r in doc:
-            print(r)
+            if r.get('id'):
+                this_proverb = self.get_proverb(r.get_text())
+                print(f"headword {this_proverb}")
         return out
 
 
@@ -137,5 +152,5 @@ class Processor(object):
 
 
 if __name__ == '__main__':
-    puk_processor = Processor(names='chapter02.html')
+    puk_processor = Processor(names='chapter11.html')
     refs = puk_processor.prepare_source()
