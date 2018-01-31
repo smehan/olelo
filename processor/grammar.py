@@ -61,8 +61,7 @@ HAW_SPELLING_NORMALIZATIONS = {'b': 'p',
 # TODO syns, Plural, Lit, antonyms
 
 DIGITS = '0123456789'
-HAW_ALPHABET = 'aāeēhiīklmnoōpuūwʻ'
-
+HAW_ALPHABET = 'AĀEĒHIĪKLMNOŌPUŪWaāeēhiīklmnoōpuūwʻ'
 
 if __name__ == '__main__':
     print(f"This is {__name__}")
