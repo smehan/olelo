@@ -28,7 +28,7 @@ class Processor(object):
     This class reads in the html source of the dict and transforms it into usable string: encoded data.
     """
     PUK_PROV_SRC_PATH = '../puk-txt/'
-    PUK_PROV_SRC_FILES = 'chapter\d\d.html'
+    PUK_PROV_SRC_FILES = 'chapter*.html'
     TMPPATH = '../tmp/'
 
     # Regex patterns compiled here for speed
@@ -127,7 +127,7 @@ class Processor(object):
         Given a doc with lines from html source, split the lines into
         dict entries for each proverb.
         :param doc:
-        :return:
+        :return: dict with proverb, [translation, explanation]
         """
         out = defaultdict(list)
         doc_l = len(doc)
@@ -164,7 +164,17 @@ class Processor(object):
                                                              'hw_stress': head_word.strip(),
                                                              'id': [tag['id']]}}
 
+    def build_proverbs(self) -> dict:
+        """
+        reads in source html and outputs a dict with all entries.
+        Includes a serialized object on disk
+        :return:
+        """
+        proverbs = {}
+        for fn in glob.glob(os.path.join(self.srcpath, self.fname)):
+            proverbs = self.prepare_source(fn=fn)
+
 
 if __name__ == '__main__':
-    puk_processor = Processor(names='chapter11.html')
-    refs = puk_processor.prepare_source()
+    puk_processor = Processor()
+    refs = puk_processor.build_proverbs()
