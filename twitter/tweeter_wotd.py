@@ -71,6 +71,16 @@ class TweeterWOTD(Tweeter, RedisDB):
                 self.push_tweet(k, self.form_def(word_defs))
                 return
 
+    @staticmethod
+    def is_good_description(desc: str)-> bool:
+        """Checks user description against a set of eval criteria to
+            determine if this is a good description to follow
+        """
+        d = desc.lower()
+        if 'hawaii' in d and 'shirt' not in d:
+            return True
+        return False
+
     def find_a_new_friend(self):
         api = self.API
         page = 0
@@ -81,7 +91,7 @@ class TweeterWOTD(Tweeter, RedisDB):
         while not found_one:
             result = api.search_users('#hawaiian', page=page)
             for user in result:
-                if user.following is False and 'hawaii' in user.description.lower():
+                if user.following is False and self.is_good_description(user.description):
                     try:
                         self.logger.info(f"friended {user.id}")
                         api.create_friendship(id=user.id)
