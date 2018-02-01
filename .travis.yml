@@ -8,7 +8,7 @@
     true
   ],
   "script": [
-    "source ~/virtualenv/python3.5/bin/activate",
+    "source ~/virtualenv/python3.6/bin/activate",
     "python --version"
   ],
   "group": "stable",
