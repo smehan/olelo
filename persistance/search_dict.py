@@ -1,5 +1,5 @@
 ###########################################################
-# Copyright (C) 2017 Shawn Mehan <shawn dot mehan at shawnmehan dot com>
+# Copyright (C) 2018 Shawn Mehan <shawn dot mehan at shawnmehan dot com>
 # Class that searches in a redis for exploration
 ###########################################################
 #
@@ -50,4 +50,4 @@ class RedisSearch(RedisDB):
 if __name__ == '__main__':
     haw_searcher = RedisSearch()
     haw_searcher.find_hw(huid='5bb6fffeffef6622eafe0e99c410b2fc9bf50cc5')
-    haw_searcher.find_hw(hw='ana')
+    haw_searcher.find_hw(hw='ālaala')

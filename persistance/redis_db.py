@@ -1,5 +1,5 @@
 ###########################################################
-# Copyright (C) 2017 Shawn Mehan <shawn dot mehan at shawnmehan dot com>
+# Copyright (C) 2018 Shawn Mehan <shawn dot mehan at shawnmehan dot com>
 # Base class for connecting and interacting with Redis DB
 ###########################################################
 #
