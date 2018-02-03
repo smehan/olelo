@@ -1,5 +1,5 @@
 ###########################################################
-# Copyright (C) 2017 Shawn Mehan <shawn dot mehan at shawnmehan dot com>
+# Copyright (C) 2018 Shawn Mehan <shawn dot mehan at shawnmehan dot com>
 # Processor for transforming Proverb source xhtml into usable data
 ###########################################################
 #
