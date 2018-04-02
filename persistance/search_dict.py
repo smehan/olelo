@@ -27,7 +27,7 @@ class RedisSearch(RedisDB):
     def __repr__(self):
         return f'<RedisSearch()'
 
-    def find_hw(self, huid=None, hw=None):
+    def find_full_hw(self, huid=None, hw=None):
         """
         Given a valid HUID or Hawaiian headword,
         will print the hawaiian hw
@@ -49,5 +49,5 @@ class RedisSearch(RedisDB):
 
 if __name__ == '__main__':
     haw_searcher = RedisSearch()
-    haw_searcher.find_hw(huid='5bb6fffeffef6622eafe0e99c410b2fc9bf50cc5')
-    haw_searcher.find_hw(hw='ālaala')
+    haw_searcher.find_full_hw(huid='5bb6fffeffef6622eafe0e99c410b2fc9bf50cc5')
+    haw_searcher.find_full_hw(hw='kālua')
