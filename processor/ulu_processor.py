@@ -91,7 +91,7 @@ class Processor(object):
         """
         Read in source html, parse the html and
         return a generator for all entries in the source
-        :param fn: str containg the basename of file to read
+        :param fn: str containing the basename of file to read
         :return: generator
         """
         page = self.get_src(fn)
@@ -273,7 +273,7 @@ class Processor(object):
     def build_dict(self) -> dict:
         """
         reads in source html and outputs a dict with all entries.
-        Includes a serialized object on disk.
+        Output includes a serialized object on disk.
         :return: 
         """
         new_words = {}
