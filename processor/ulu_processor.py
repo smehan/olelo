@@ -26,6 +26,7 @@ class Processor(object):
     This class reads in the html source of the dict and transforms it into usable string: encoded data.
     """
     ULUDICTSRCPATH = '../ulu-dict/'
+    #TODO this has haw and eng mixed. split out into two different sets
     ULUDICTSRCFILES = 'puk-*.html'
     TMPPATH = '../tmp/'
 
@@ -48,8 +49,8 @@ class Processor(object):
     def get_src(self, fn=None) -> BeautifulSoup:
         """
         Will read in an html document and return a bs4 object.
-        :param fn:
-        :return:
+        :param fn: If not explicit, expects to use init fn for object.
+        :return: bs4 object
         """
         if fn is None:
             fn = os.path.join(self.srcpath, self.fname)
@@ -59,7 +60,7 @@ class Processor(object):
     @staticmethod
     def get_dict_entries(p: BeautifulSoup) -> list:
         """
-        given a bs4 object with the dictionary html, will return all of the headword elements in the page
+        given a bs4 object containing the dictionary html, will return all of the headword elements in the page
         :param p: bs4: object formed from page
         :return: list: references to headword elements in page as bs4 tags
         """
