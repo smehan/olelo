@@ -105,5 +105,5 @@ class TweeterWOTD(Tweeter, RedisDB):
 if __name__ == "__main__":
     t = TweeterWOTD(debug=True)
     print(t.print_tweets())
-    t.find_a_new_friend()
+    #t.find_a_new_friend()
     t.make_tweet_of_day()
