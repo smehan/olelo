@@ -8,11 +8,22 @@
 # standard libs
 
 # 3rd-party libs
+from flask import render_template, redirect, url_for, flash
 
 # application libs
 from oleloweb import app
 
+test_data = [
+    {
+        'name': 'Bob',
+        'age': 55
+    },
+    {
+        'name': 'Sue',
+        'age': 44
+    }
+]
 
 @app.route('/')
 def hello():
-    return "<h1>Hello, World</h1>"
+    return render_template('hello.html', data=test_data)
