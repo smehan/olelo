@@ -27,24 +27,24 @@ class Processor(object):
     """
     ULUDICTSRCPATH = '../ulu-dict/'
     #TODO this has haw and eng mixed. split out into two different sets
-    ULUDICTSRCFILES = 'puk-*.html'
+    ULUHAWDICTSRCFILES = 'puk-*.html'
     TMPPATH = '../tmp/'
 
     # Regex patterns compiled here for speed
     CONTENT_POS = re.compile(r'^(?:\d+\.\s)?[a-z.]+\.')
     CONTENT_DEF = re.compile(r'^(?:\d+\.\s)?(.*)$')
 
-    def __init__(self, path=None, names=None):
+    def __init__(self, path=None, hawnames=None):
         """Constructor for Processor"""
         if path is None:
             self.srcpath = self.ULUDICTSRCPATH
         elif path:
             self.srcpath = path
         # TODO this will break for more than one file passed as a param
-        if names is None:
-            self.fname = self.ULUDICTSRCFILES
-        elif names:
-            self.fname = names
+        if hawnames is None:
+            self.hawfname = self.ULUHAWDICTSRCFILES
+        elif hawnames:
+            self.hawfname = hawnames
 
     def get_src(self, fn=None) -> BeautifulSoup:
         """
@@ -53,7 +53,7 @@ class Processor(object):
         :return: bs4 object
         """
         if fn is None:
-            fn = os.path.join(self.srcpath, self.fname)
+            fn = os.path.join(self.srcpath, self.hawfname)
         with open(fn, 'r') as f:
             return BeautifulSoup(f.read(), 'html.parser')
 
@@ -278,7 +278,7 @@ class Processor(object):
         :return: 
         """
         new_words = {}
-        for name in glob.glob(os.path.join(self.srcpath, self.fname)):
+        for name in glob.glob(os.path.join(self.srcpath, self.hawfname)):
             print(name)
             source_words = self.prepare_source(fn=name)
             new_words.update(self.make_dict(source_words))
