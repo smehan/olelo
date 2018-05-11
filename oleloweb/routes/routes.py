@@ -31,9 +31,8 @@ def hello():
     return render_template('hello.html', data=test_data)
 
 
-@app.route('/try')
+@app.route('/proverbs')
 def trial():
     puk_processor = Puk(path='puk-txt')
-    refs = puk_processor.build_proverbs()
-    return render_template('list_all.html', data=refs)
+    return render_template('list_all.html', data=puk_processor.build_proverbs())
 
