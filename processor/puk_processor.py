@@ -97,10 +97,8 @@ class Processor(object):
         :return: generator
         """
         page = self.get_src(fn)
-        refs = self.get_puk_entries(page)
-        pp = pprint.PrettyPrinter(indent=4)
-        pp.pprint(refs)
-        print(self.split_entries(refs))
+        return self.split_entries(self.get_puk_entries(page))
+        #TODO perhaps this should be a generator
         #return (self.build_source_entry(r) for r in refs)
 
     def get_proverb(self, s: str)-> str:
@@ -114,6 +112,7 @@ class Processor(object):
             print(f'\n\nFAILED TO SPLIT: {s}\n\n')
             return None
 
+    @staticmethod
     def get_body(self, s: str)-> str:
         """given an body line from source, clean it and return.
            Could be a translation or explanation with HAW content.
@@ -144,7 +143,6 @@ class Processor(object):
                 out[this_proverb].append(self.get_body(r.get_text))
         return out
 
-
     def build_source_entry(self, tag: Tag) -> dict:
         """
         Given a bs4 tag will parse tag and return a dict of the
@@ -173,6 +171,7 @@ class Processor(object):
         proverbs = {}
         for fn in glob.glob(os.path.join(self.srcpath, self.fname)):
             proverbs = self.prepare_source(fn=fn)
+        return proverbs
 
 
 if __name__ == '__main__':
