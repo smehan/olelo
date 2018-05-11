@@ -9,6 +9,7 @@
 
 # 3rd-party libs
 from flask import render_template, redirect, url_for, flash
+from werkzeug.contrib.cache import RedisCache
 
 # application libs
 from oleloweb import app
