@@ -12,6 +12,7 @@ from flask import render_template, redirect, url_for, flash
 
 # application libs
 from oleloweb import app
+from processor import Puk
 
 test_data = [
     {
@@ -24,6 +25,15 @@ test_data = [
     }
 ]
 
+
 @app.route('/')
 def hello():
     return render_template('hello.html', data=test_data)
+
+
+@app.route('/try')
+def trial():
+    puk_processor = Puk(path='puk-txt')
+    refs = puk_processor.build_proverbs()
+    return render_template('list_all.html', data=refs)
+

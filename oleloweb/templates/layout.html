@@ -10,17 +10,16 @@
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
     <!-- Optional theme -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
-
+{#    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">#}
+    <!-- local theme -->
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='stub.css') }}">
 </head>
 <body>
-    <div class="container">
-    {% block content %}
-    {% endblock %}
-    </div>
+{#    <div class="container">#}
+{#    {% block content %}{% endblock %}#}
+{#    </div>#}
+    {% block content %}{% endblock %}
 </body>
-</html>
-
 
 <!-- Placed at end to speed loading -->
 <!-- jQuery library -->
@@ -31,3 +30,5 @@
 
 <!-- Latest compiled JavaScript -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+
+</html>
