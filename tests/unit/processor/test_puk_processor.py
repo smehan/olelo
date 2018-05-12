@@ -14,11 +14,8 @@ from processor.puk_processor import Processor
 from tests.unit.processor.processor_resources import SRC_HTML, SRC_TEXT
 
 
-
-
-
-
 "'265    E ao o miki aku o Ka-‘ili-pehu.'"
+
 
 class TestPukProcessor(object):
 
