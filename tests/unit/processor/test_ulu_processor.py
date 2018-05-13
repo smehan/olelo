@@ -43,7 +43,7 @@ class TestProcessor(object):
 
     def setup_class(self):
         print("\nTestProcessor setting up ...\n\n")
-        self.p = Processor(path='tests/unit/processor', hawnames='processor_src.html')
+        self.p = Processor(path='unit/processor', hawnames='processor_src.html')
 
     @classmethod
     def teardown_class(cls):

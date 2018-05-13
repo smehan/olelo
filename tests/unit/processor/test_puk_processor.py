@@ -29,6 +29,6 @@ class TestPukProcessor(object):
 
     def test_get_proverb(self):
         assert self.p.get_proverb(None) == None
-        assert self.p.get_proverb("'265    E ao o miki aku o Ka-‘ili-pehu.'") == \
+        assert self.p.get_proverb("265    E ao o miki aku o Ka-‘ili-pehu.") == \
                'E ao o miki aku o Ka-‘ili-pehu.'
 
