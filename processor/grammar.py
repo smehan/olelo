@@ -62,6 +62,7 @@ HAW_SPELLING_NORMALIZATIONS = {'b': 'p',
 
 DIGITS = '0123456789'
 HAW_ALPHABET = 'AĀEĒHIĪKLMNOŌPUŪWaāeēhiīklmnoōpuūwʻ'
+OKINA_ALTS = "ʻ'‘"  # index 0 is \u699 which is official code point. [2] is LEFT SINGLE QUOTATION MARK U+8216
 
 if __name__ == '__main__':
     print(f"This is {__name__}")
