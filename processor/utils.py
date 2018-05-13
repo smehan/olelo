@@ -25,5 +25,6 @@ def unicode_code_points(s):
         print(unicodedata.name(c))
 
 
-s = 'a iʻole'
-unicode_code_points(s)
+if __name__ == '__main__':
+    s = 'a iʻole'
+    unicode_code_points(s)
