@@ -20,7 +20,7 @@ from collections import defaultdict
 import pprint
 
 # application libs
-from grammar import HAW_POS
+from grammar import HAW_POS, OKINA_ALTS, standardize_okina
 
 
 class Processor(object):
@@ -29,7 +29,7 @@ class Processor(object):
     """
     PUK_PROV_SRC_PATH = '../puk-txt/'
     PUK_PROV_SRC_FILES = 'chapter*.html'
-    TMPPATH = '../tmp/'
+    TMPPATH = '/tmp/'
 
     # Regex patterns compiled here for speed
     CONTENT_PROV = '^(?:\d+)(?:\s*)([AĀEĒHIĪKLMNOŌPUŪWaāeēhiīklmnoōpuūw,ʻ‘\s].*)$'
@@ -83,7 +83,7 @@ class Processor(object):
         """
         if entry is None or entry == '':
             return None, None
-        entry = entry.strip()
+        entry = standardize_okina(entry.strip())
         # TODO there are language tags in the original html, including HAW and LAT, that prolly should be leveraged
         hw = entry.split('\n')[0].rstrip()
         rest = entry.split('\n')[1:]
@@ -93,7 +93,7 @@ class Processor(object):
         """
         Read in source html, parse the html and
         return a generator for all entries in the source
-        :param fn: str containg the basename of file to read
+        :param fn: str containing the basename of file to read
         :return: generator
         """
         page = self.get_src(fn)
@@ -113,8 +113,8 @@ class Processor(object):
             return None
 
     @staticmethod
-    def get_body(self, s: str)-> str:
-        """given an body line from source, clean it and return.
+    def get_body(s: str)-> str:
+        """given a body line from source, clean it and return.
            Could be a translation or explanation with HAW content.
         """
         if s is None:
@@ -170,10 +170,12 @@ class Processor(object):
         """
         proverbs = {}
         for fn in glob.glob(os.path.join(self.srcpath, self.fname)):
-            proverbs = self.prepare_source(fn=fn)
+            proverbs.update(self.prepare_source(fn=fn))
+        with open(os.path.join(self.TMPPATH, 'puk_proverbs.pickle'), 'wb') as fh:
+            pickle.dump(proverbs, fh)
         return proverbs
 
 
 if __name__ == '__main__':
     puk_processor = Processor()
-    refs = puk_processor.build_proverbs()
+    pprint.pprint(puk_processor.build_proverbs())

@@ -1,5 +1,5 @@
 ###########################################################
-# Copyright (C) 2017 Shawn Mehan <shawn dot mehan at shawnmehan dot com>
+# Copyright (C) 2018 Shawn Mehan <shawn dot mehan at shawnmehan dot com>
 # Processor for transforming source html into usable data.
 # This module defines general grammatical maps and constants
 ###########################################################
@@ -9,6 +9,7 @@
 # standard libs
 
 # 3rd-party libs
+import unicodedata
 
 # application libs
 
@@ -62,7 +63,14 @@ HAW_SPELLING_NORMALIZATIONS = {'b': 'p',
 
 DIGITS = '0123456789'
 HAW_ALPHABET = 'AĀEĒHIĪKLMNOŌPUŪWaāeēhiīklmnoōpuūwʻ'
-OKINA_ALTS = "ʻ'‘"  # index 0 is \u699 which is official code point. [2] is LEFT SINGLE QUOTATION MARK U+8216
+OKINA_ALTS = u"\u02BB\u0027\u2018"  # index 0 is \u02BB which is official code point. [2] is LEFT SINGLE QUOTATION MARK U+8216
+
+
+def standardize_okina(s: str) -> str:
+    for c in OKINA_ALTS[1:]:
+        s = s.replace(c, OKINA_ALTS[0])
+    return s
+
 
 if __name__ == '__main__':
     print(f"This is {__name__}")
