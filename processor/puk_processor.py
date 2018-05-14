@@ -105,7 +105,7 @@ class Processor(object):
         """given a proverb line from source, clean it and return"""
         if s is None:
             return None
-        s = unicodedata.normalize("NFKD", s)
+        s = standardize_okina(unicodedata.normalize("NFKD", s))
         try:
             return re.match(self.CONTENT_PROV, s).group(1)
         except:
