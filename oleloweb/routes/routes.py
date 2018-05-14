@@ -33,7 +33,7 @@ def hello():
 
 
 @app.route('/proverbs')
-def trial():
+def list_all_proverbs():
     puk_processor = Puk(path='puk-txt')
     return render_template('list_all_proverbs.html', data=puk_processor.build_proverbs())
 

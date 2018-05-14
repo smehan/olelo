@@ -24,4 +24,4 @@ class TestTweeter(object):
         pass
 
     def test_print_tweets(self):
-        assert '#hawaiian:' in self.t.print_tweets()
+        assert '#Hawaiian:' in self.t.print_tweets()

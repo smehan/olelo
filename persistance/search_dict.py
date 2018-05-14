@@ -51,4 +51,4 @@ class RedisSearch(RedisDB):
 if __name__ == '__main__':
     haw_searcher = RedisSearch()
     haw_searcher.find_full_hw(huid='5bb6fffeffef6622eafe0e99c410b2fc9bf50cc5')
-    haw_searcher.find_full_hw(hw='moku')
+    haw_searcher.find_full_hw(hw='kokua')
