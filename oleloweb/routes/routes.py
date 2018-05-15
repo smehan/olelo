@@ -16,21 +16,12 @@ from oleloweb import app
 from processor import Puk
 from hua import Hua
 
-test_data = [
-    {
-        'name': 'Bob',
-        'age': 55
-    },
-    {
-        'name': 'Sue',
-        'age': 44
-    }
-]
-
 
 @app.route('/')
-def hello():
-    return render_template('hello.html', data=test_data)
+@app.route('/hua/wotd')
+def wotd():
+    hua = Hua()
+    return render_template('hua/hua.html', wotd=hua.make_word_of_day())
 
 
 @app.route('/proverbs')
@@ -39,7 +30,3 @@ def list_all_proverbs():
     return render_template('proverbs/list_all_proverbs.html', data=puk_processor.build_proverbs())
 
 
-@app.route('/hua/wotd')
-def wotd():
-    hua = Hua()
-    return render_template('hua/hua.html', wotd=hua.make_word_of_day())
