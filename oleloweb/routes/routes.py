@@ -36,10 +36,10 @@ def hello():
 @app.route('/proverbs')
 def list_all_proverbs():
     puk_processor = Puk(path='puk-txt')
-    return render_template('list_all_proverbs.html', data=puk_processor.build_proverbs())
+    return render_template('proverbs/list_all_proverbs.html', data=puk_processor.build_proverbs())
 
 
 @app.route('/hua/wotd')
 def wotd():
     hua = Hua()
-    return render_template('hua.html', wotd=hua.make_word_of_day())
+    return render_template('hua/hua.html', wotd=hua.make_word_of_day())
