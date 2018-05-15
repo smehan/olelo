@@ -10,7 +10,7 @@ U+02BB MODIFIER LETTER TURNED COMMA
  meaning things like text selection will include it in a word). 
  For various reasons it often gets written as the ASCII 
  apostrophe U+0027 or ASCII grave/backtick character 
- U+0060, and not all fonts will have the proper symbol 
+ U+0060, or U+2018 and not all fonts will have the proper symbol 
  for it.
 
 ## Alphabetical ordering

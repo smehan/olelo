@@ -63,7 +63,7 @@ HAW_SPELLING_NORMALIZATIONS = {'b': 'p',
 
 DIGITS = '0123456789'
 HAW_ALPHABET = 'AĀEĒHIĪKLMNOŌPUŪWaāeēhiīklmnoōpuūwʻ'
-OKINA_ALTS = u"\u02BB\u0027\u2018"  # index 0 is \u02BB which is official code point. [2] is LEFT SINGLE QUOTATION MARK U+8216
+OKINA_ALTS = u"\u02BB\u0027\u2018"  # index 0 is \u02BB which is official code point. [2] is LEFT SINGLE QUOTATION MARK U+8218
 
 
 def standardize_okina(s: str) -> str:
