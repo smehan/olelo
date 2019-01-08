@@ -27,8 +27,33 @@ class TestPukProcessor(object):
     def teardown_class(cls):
         pass
 
+
+    def test_get_src(self):
+        pass
+
+    def test_get_puk_entries(self):
+        pass
+
+    def test_parse_content(self):
+        pass
+
+    def test_prepare_source(self):
+        pass
+
+    def test_get_body(self):
+        pass
+
+    def test_split_entries(self):
+        pass
+
     def test_get_proverb(self):
         assert self.p.get_proverb(None) == None
         assert self.p.get_proverb("'265    E ao o miki aku o Ka-‘ili-pehu.'") == \
-               'E ao o miki aku o Ka-‘ili-pehu.'
+                                  'E ao o miki aku o Ka-‘ili-pehu.'
+
+    def test_build_source_entry(self):
+        pass
+
+    def test_build_proverbs(self):
+        pass
 
