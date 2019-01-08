@@ -1,5 +1,5 @@
 ###########################################################
-# Copyright (C) 2018 Shawn Mehan <shawn dot mehan at shawnmehan dot com>
+# Copyright (C) 2019 Shawn Mehan <shawn dot mehan at shawnmehan dot com>
 # Processor for transforming Proverb source xhtml into usable data
 ###########################################################
 #
@@ -105,7 +105,7 @@ class Processor(object):
         """given a proverb line from source, clean it and return"""
         if s is None:
             return None
-        s = unicodedata.normalize("NFKD", s)
+        s = unicodedata.normalize("NFKD", s).strip("'")
         try:
             return re.match(self.CONTENT_PROV, s).group(1)
         except:
@@ -113,7 +113,7 @@ class Processor(object):
             return None
 
     @staticmethod
-    def get_body(self, s: str)-> str:
+    def get_body(self, s: str = None)-> str:
         """given an body line from source, clean it and return.
            Could be a translation or explanation with HAW content.
         """

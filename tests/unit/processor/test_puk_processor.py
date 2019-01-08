@@ -1,4 +1,4 @@
-# Copyright (C) 2017 Shawn Mehan <shawn dot mehan at shawnmehan dot com>
+# Copyright (C) 2019 Shawn Mehan <shawn dot mehan at shawnmehan dot com>
 # Tests for Processor for transforming proverb source html into usable data
 ###########################################################
 #
@@ -14,11 +14,8 @@ from processor.puk_processor import Processor
 from tests.unit.processor.processor_resources import SRC_HTML, SRC_TEXT
 
 
-
-
-
-
 "'265    E ao o miki aku o Ka-‘ili-pehu.'"
+
 
 class TestPukProcessor(object):
 
